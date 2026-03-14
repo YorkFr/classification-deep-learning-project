@@ -1,0 +1,338 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{array}
+
+\title[AlexNet vs DHVT]{Comparison of AlexNet and DHVT\\on the Same Image Classification Dataset}
+\subtitle{Course Presentation}
+\author{Your Name}
+\institute{Universit\'e Paris Cit\'e}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}{Project Goal}
+    \begin{itemize}
+        \item The project compares a classical convolutional model and a transformer-style model under the same dataset setting.
+        \item The two models are trained, saved, reloaded, and evaluated in the same notebook workflow.
+        \item The main objective is to analyze not only accuracy, but also training behavior, confidence, and difficult examples.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Why Compare AlexNet and DHVT?}
+    \begin{table}
+        \centering
+        \begin{tabular}{p{3.2cm}p{6.9cm}}
+            \toprule
+            Model & Role in the study \\
+            \midrule
+            AlexNet & CNN baseline with strong image inductive bias and a clear layer-by-layer structure. \\
+            DHVT & Transformer-style model adapted to small datasets through overlapped patch embedding and DAFF blocks. \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item This comparison contrasts local convolutional processing with token-based attention.
+        \item Both models use the same dataset configuration to keep the experiment fair.
+    \end{itemize}
+\end{frame}
+
+\section{Dataset and Workflow}
+
+\begin{frame}{Dataset Options}
+    \begin{table}
+        \centering
+        \begin{tabular}{p{3.2cm}p{7cm}}
+            \toprule
+            Option & Description \\
+            \midrule
+            \texttt{CIFAR-10} & Standard 10-class benchmark used as the main baseline dataset. \\
+            \texttt{CIFAR-100} & Same image format with more classes and higher difficulty. \\
+            \texttt{custom\_folder} & User dataset with \texttt{train/class\_name} and \texttt{val/class\_name} folders. \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item Both models can be trained on the same selected dataset.
+        \item Custom inference images are stored separately in \texttt{test\_images/}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Shared Experimental Workflow}
+    \begin{table}
+        \centering
+        \begin{tabular}{c p{8.2cm}}
+            \toprule
+            Step & Procedure \\
+            \midrule
+            1 & Choose local runtime or Colab runtime. \\
+            2 & Select the dataset and preprocessing settings. \\
+            3 & Train AlexNet and DHVT on the same split. \\
+            4 & Save the best checkpoints for both models. \\
+            5 & Reload the saved models for evaluation and inference. \\
+            6 & Compare training curves and qualitative outputs. \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\section{Models}
+
+\begin{frame}{AlexNet}
+    \begin{itemize}
+        \item AlexNet uses stacked convolutions, ReLU, pooling, and fully connected layers.
+        \item In the notebook, it serves as the CNN baseline for the comparison.
+        \item The convolution operation is written as:
+    \end{itemize}
+
+    \[
+    Y_{i,j}=\sum_u\sum_v K_{u,v}X_{i+u,j+v}
+    \]
+
+    \[
+    \mathrm{ReLU}(x)=\max(0,x)
+    \]
+
+    \begin{itemize}
+        \item This structure emphasizes local feature extraction and spatial hierarchy.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{DHVT}
+    \begin{itemize}
+        \item DHVT is a transformer-style architecture adapted to smaller datasets.
+        \item The model includes SOPE, class token, positional embeddings, attention blocks, and DAFF.
+        \item Patch-token embedding can be summarized as:
+    \end{itemize}
+
+    \[
+    X \in \mathbb{R}^{B \times C \times H \times W}
+    \rightarrow
+    E \in \mathbb{R}^{B \times N \times d}
+    \]
+
+    \[
+    Z_0=[x_{\mathrm{cls}};E], \qquad Z=Z_0+P
+    \]
+
+    \begin{itemize}
+        \item The model is trained from scratch rather than used only for fine-tuning.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Attention and DHVT Block}
+    \[
+    Q=ZW_Q,\qquad K=ZW_K,\qquad V=ZW_V
+    \]
+
+    \[
+    \mathrm{Attention}(Q,K,V)=\mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+    \]
+
+    \[
+    Z' = Z + \mathrm{MHSA}(\mathrm{LN}(Z))
+    \]
+
+    \[
+    Z'' = Z' + \mathrm{DAFF}(\mathrm{LN}(Z'))
+    \]
+
+    \begin{itemize}
+        \item The DAFF block adds a convolution-aware feed-forward stage.
+        \item This design helps the transformer preserve useful locality for small datasets.
+    \end{itemize}
+\end{frame}
+
+\section{Training and Difficulties}
+
+\begin{frame}{Training Strategy}
+    \begin{itemize}
+        \item Both models are trained under the same dataset configuration.
+        \item Checkpoints are saved and reloaded inside the notebook.
+        \item The objective function is the cross-entropy loss:
+    \end{itemize}
+
+    \[
+    \mathcal{L} = - \sum_{c=1}^{C} y_c \log(\hat{p}_c)
+    \]
+
+    \begin{itemize}
+        \item Validation accuracy is monitored to keep the best weights for each model.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Main Difficulties and Solutions}
+    \begin{table}
+        \centering
+        \begin{tabular}{p{4cm}p{5.8cm}}
+            \toprule
+            Difficulty & Solution \\
+            \midrule
+            Fair comparison & Use one notebook and one shared dataset configuration. \\
+            Small-dataset transformer training & Use a DHVT-style architecture trained from scratch. \\
+            Homework-style presentation & Keep the workflow step-by-step in the notebook. \\
+            Reusability & Support multiple datasets and custom folders. \\
+            Long training runs & Print intermediate progress during training. \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\section{Results}
+
+\begin{frame}{Main Numerical Results}
+    \begin{table}
+        \centering
+        \begin{tabular}{p{4.5cm}cc}
+            \toprule
+            Metric & AlexNet & DHVT \\
+            \midrule
+            Best validation accuracy & 0.6254 & 0.8081 \\
+            Number of parameters & 58,322,314 & 6,504,202 \\
+            Mean confidence & 0.6150 & 0.8247 \\
+            Mean confidence on correct predictions & 0.7000 & 0.8285 \\
+            Mean confidence on incorrect predictions & 0.4712 & 0.8289 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item DHVT achieved higher validation accuracy with far fewer parameters.
+        \item This is the strongest quantitative result currently available.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Validation Curves}
+    \centering
+    \includegraphics[width=0.92\linewidth]{../report/figures/01_validation_curves.png}
+\end{frame}
+
+\begin{frame}{Confusion Matrices}
+    \centering
+    \includegraphics[width=0.78\linewidth]{../report/figures/02_confusion_matrices.png}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item This figure illustrates the intended class-level comparison.
+        \item It should be regenerated after rerunning the corrected evaluation cells.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Misclassified Examples}
+    \centering
+    \includegraphics[width=0.7\linewidth]{../report/figures/03_misclassified_examples.png}
+\end{frame}
+
+\begin{frame}{Both Models Wrong}
+    \centering
+    \includegraphics[width=0.7\linewidth]{../report/figures/04_both_models_wrong_examples.png}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item These are the hardest samples in the current evaluation.
+        \item They help identify ambiguous or visually difficult inputs.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Confidence Distribution}
+    \centering
+    \includegraphics[width=0.7\linewidth]{../report/figures/05_confidence_distribution.png}
+\end{frame}
+
+\begin{frame}{Agreement Analysis}
+    \begin{columns}[T]
+        \begin{column}{0.54\linewidth}
+            \includegraphics[width=\linewidth]{../report/figures/06_agreement_analysis.png}
+        \end{column}
+        \begin{column}{0.42\linewidth}
+            \begin{table}
+                \centering
+                \begin{tabular}{p{2.6cm}c}
+                    \toprule
+                    Case & Ratio \\
+                    \midrule
+                    Both correct & 0.5803 \\
+                    AlexNet only & 0.0483 \\
+                    DHVT only & 0.2265 \\
+                    Both wrong & 0.1450 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Evaluation Note}
+    \begin{itemize}
+        \item A label-alignment bug was identified in some post-training analysis cells.
+        \item The issue came from zipping two evaluation loaders that used different batch sizes.
+        \item Training curves and parameter counts remain valid.
+        \item Post-training visual analyses should be rerun in Colab with the corrected notebook cells.
+    \end{itemize}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+    \begin{itemize}
+        \item DHVT is the stronger model in the current experiment.
+        \item It achieves better validation accuracy while using fewer parameters than AlexNet.
+        \item The notebook now supports training, saving, reloading, inference, and visual comparison in one workflow.
+        \item The project also shows that model evaluation should include curves, confidence behavior, and qualitative error analysis.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Future Work}
+    \begin{itemize}
+        \item Rerun the corrected post-training analysis cells and refresh the exported figures.
+        \item Extend the comparison to another dataset such as CIFAR-100 or a custom image folder.
+        \item Add transformer-specific visualizations such as attention maps after the evaluation pipeline is stable.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+    \footnotesize
+    \begin{thebibliography}{9}
+        \bibitem{alexnet}
+        Krizhevsky, A., Sutskever, I., and Hinton, G. E.
+        \newblock \emph{ImageNet Classification with Deep Convolutional Neural Networks}.
+        \newblock 2012.
+
+        \bibitem{vit}
+        Dosovitskiy, A. et al.
+        \newblock \emph{An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale}.
+        \newblock 2021.
+
+        \bibitem{dhvt}
+        Lu, Y. et al.
+        \newblock \emph{Bridging the Gap Between Vision Transformers and Convolutional Neural Networks on Small Datasets}.
+        \newblock 2022.
+    \end{thebibliography}
+\end{frame}
+
+\end{document}

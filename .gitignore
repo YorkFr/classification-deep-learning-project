@@ -2,13 +2,19 @@
 __pycache__/
 *.py[cod]
 *.pyo
+.venv/
 # Jupyter
 .ipynb_checkpoints/
 # PyTorch weights
 *.pth
+*.pt
 # Editor and OS
 .vscode/
 .DS_Store
+.venv/
 # 数据目录（如果不想上传）
 data/
-# 保存并执行:
+models/*
+!models/.gitkeep
+predictions/*
+!predictions/.gitkeep
