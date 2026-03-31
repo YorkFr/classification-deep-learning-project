@@ -23,12 +23,13 @@
 \contentsline {subsection}{\numberline {9.5}Difficulty 5: Long Training Time and Missing Intermediate Output}{8}{subsection.9.5}%
 \contentsline {section}{\numberline {10}Results}{8}{section.10}%
 \contentsline {subsection}{\numberline {10.1}Training and Validation Curves}{9}{subsection.10.1}%
-\contentsline {subsection}{\numberline {10.2}Confusion Matrices}{10}{subsection.10.2}%
-\contentsline {subsection}{\numberline {10.3}Misclassified Examples}{10}{subsection.10.3}%
-\contentsline {subsection}{\numberline {10.4}Examples Misclassified by Both Models}{11}{subsection.10.4}%
-\contentsline {subsection}{\numberline {10.5}Confidence Distribution}{12}{subsection.10.5}%
-\contentsline {subsection}{\numberline {10.6}Agreement and Disagreement Between Models}{12}{subsection.10.6}%
-\contentsline {section}{\numberline {11}Discussion}{13}{section.11}%
-\contentsline {section}{\numberline {12}Conclusion}{13}{section.12}%
-\contentsline {section}{\numberline {A}Appendix: Exported Figures Used in This Report}{14}{appendix.A}%
-\contentsline {section}{\numberline {B}References}{14}{appendix.B}%
+\contentsline {subsection}{\numberline {10.2}Confusion Matrices}{9}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Misclassified Examples}{11}{subsection.10.3}%
+\contentsline {subsection}{\numberline {10.4}Examples Misclassified by Both Models}{12}{subsection.10.4}%
+\contentsline {subsection}{\numberline {10.5}Confidence Distribution}{13}{subsection.10.5}%
+\contentsline {subsection}{\numberline {10.6}Agreement and Disagreement Between Models}{14}{subsection.10.6}%
+\contentsline {subsection}{\numberline {10.7}DHVT Attention Visualization}{16}{subsection.10.7}%
+\contentsline {section}{\numberline {11}Discussion}{17}{section.11}%
+\contentsline {section}{\numberline {12}Conclusion}{18}{section.12}%
+\contentsline {section}{\numberline {A}Appendix: Exported Figures Used in This Report}{18}{appendix.A}%
+\contentsline {section}{\numberline {B}References}{19}{appendix.B}%

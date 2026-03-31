@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.29)  14 MAR 2026 17:46
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.29)  31 MAR 2026 22:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -522,16 +522,16 @@ Underfull \hbox (badness 1173) in paragraph at lines 104--105
 
 [2]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-21.
+23.
  (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-Underfull \hbox (badness 10000) in paragraph at lines 123--124
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
 []|\T1/lmr/m/n/10.95 Folder-based dataset us-ing the struc-ture
  []
 
 [3] [4] [5] [6]
-Underfull \hbox (badness 10000) in paragraph at lines 289--290
+Underfull \hbox (badness 10000) in paragraph at lines 291--292
 []|\T1/lmr/m/n/10.95 Improve ro-bust-ness to mi-nor ori-en-ta-tion
  []
 
@@ -540,32 +540,41 @@ File: figures/01_validation_curves.png Graphic file (type bmp)
 <figures/01_validation_curves.png>
 File: figures/02_confusion_matrices.png Graphic file (type bmp)
 <figures/02_confusion_matrices.png>
+File: figures/07_per_class_accuracy.png Graphic file (type bmp)
+<figures/07_per_class_accuracy.png>
  [9]
 File: figures/03_misclassified_examples.png Graphic file (type bmp)
 <figures/03_misclassified_examples.png>
  [10]
 File: figures/04_both_models_wrong_examples.png Graphic file (type bmp)
 <figures/04_both_models_wrong_examples.png>
+ [11]
 File: figures/05_confidence_distribution.png Graphic file (type bmp)
 <figures/05_confidence_distribution.png>
- [11]
+ [12]
+File: figures/08_precision_recall_f1.png Graphic file (type bmp)
+<figures/08_precision_recall_f1.png>
+ [13]
 File: figures/06_agreement_analysis.png Graphic file (type bmp)
 <figures/06_agreement_analysis.png>
- [12] [13] [14] (main.aux)
+ [14]
+File: figures/09_dhvt_attention_visualization.png Graphic file (type bmp)
+<figures/09_dhvt_attention_visualization.png>
+ [15] [16] [17] [18] [19] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-11-06>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: FB2CC31351EC90CD32E83A634B2D60DF;6320.
+(rerunfilecheck)             Checksum: 12386F85D98B14E4CF2A60B9EF29BFBF;6526.
  ) 
 Here is how much of TeX's memory you used:
- 11235 strings out of 402987
- 168186 string characters out of 5448523
- 598608 words of memory out of 5000000
- 39796 multiletter control sequences out of 15000+600000
+ 11265 strings out of 402987
+ 169365 string characters out of 5448523
+ 599090 words of memory out of 5000000
+ 39823 multiletter control sequences out of 15000+600000
  681249 words of font info for 73 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 72i,10n,79p,724b,372s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,10n,79p,816b,478s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (15 pages).
+Output written on main.pdf (20 pages).

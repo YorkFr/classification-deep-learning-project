@@ -56,6 +56,7 @@
     \begin{itemize}
         \item This comparison contrasts local convolutional processing with token-based attention.
         \item Both models use the same dataset configuration to keep the experiment fair.
+        \item The report and slides should discuss trade-offs, not only advantages.
     \end{itemize}
 \end{frame}
 
@@ -126,6 +127,7 @@
     \begin{itemize}
         \item DHVT is a transformer-style architecture adapted to smaller datasets.
         \item The model includes SOPE, class token, positional embeddings, attention blocks, and DAFF.
+        \item Its strength is global interaction, but it is also more complex to train and explain than a CNN baseline.
         \item Patch-token embedding can be summarized as:
     \end{itemize}
 
@@ -211,19 +213,20 @@
             \toprule
             Metric & AlexNet & DHVT \\
             \midrule
-            Best validation accuracy & 0.6254 & 0.8081 \\
+            Best validation accuracy & 0.6848 & 0.8062 \\
             Number of parameters & 58,322,314 & 6,504,202 \\
-            Mean confidence & 0.6150 & 0.8247 \\
-            Mean confidence on correct predictions & 0.7000 & 0.8285 \\
-            Mean confidence on incorrect predictions & 0.4712 & 0.8289 \\
+            Macro precision & 0.6811 & 0.8057 \\
+            Macro recall & 0.6848 & 0.8062 \\
+            Macro F1-score & 0.6814 & 0.8056 \\
             \bottomrule
         \end{tabular}
     \end{table}
 
     \vspace{0.2cm}
     \begin{itemize}
-        \item DHVT achieved higher validation accuracy with far fewer parameters.
-        \item This is the strongest quantitative result currently available.
+        \item DHVT is both more accurate and more parameter-efficient.
+        \item The advantage is confirmed by several metrics, not by accuracy alone.
+        \item But the transformer branch still comes with higher architectural and optimization complexity.
     \end{itemize}
 \end{frame}
 
@@ -238,8 +241,19 @@
 
     \vspace{0.2cm}
     \begin{itemize}
-        \item This figure illustrates the intended class-level comparison.
-        \item It should be regenerated after rerunning the corrected evaluation cells.
+        \item DHVT has a stronger diagonal, which means better class-level consistency.
+        \item Both models still confuse visually similar classes such as cat and dog.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Per-Class Accuracy}
+    \centering
+    \includegraphics[width=0.6\linewidth]{../report/figures/07_per_class_accuracy.png}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item The gain of DHVT is broad across classes rather than concentrated in one category.
+        \item The biggest improvements appear on visually difficult classes such as bird, deer, and dog.
     \end{itemize}
 \end{frame}
 
@@ -262,6 +276,12 @@
 \begin{frame}{Confidence Distribution}
     \centering
     \includegraphics[width=0.7\linewidth]{../report/figures/05_confidence_distribution.png}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item DHVT is more confident overall, but the figure also shows how confidence behaves on mistakes.
+        \item This helps evaluate reliability rather than only top-1 accuracy.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Agreement Analysis}
@@ -276,10 +296,10 @@
                     \toprule
                     Case & Ratio \\
                     \midrule
-                    Both correct & 0.5803 \\
-                    AlexNet only & 0.0483 \\
-                    DHVT only & 0.2265 \\
-                    Both wrong & 0.1450 \\
+                    Both correct & 0.6304 \\
+                    AlexNet only & 0.0544 \\
+                    DHVT only & 0.1758 \\
+                    Both wrong & 0.1394 \\
                     \bottomrule
                 \end{tabular}
             \end{table}
@@ -287,31 +307,58 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Evaluation Note}
+\begin{frame}{Precision, Recall, and F1}
+    \centering
+    \includegraphics[width=0.5\linewidth]{../report/figures/08_precision_recall_f1.png}
+
+    \vspace{0.2cm}
     \begin{itemize}
-        \item A label-alignment bug was identified in some post-training analysis cells.
-        \item The issue came from zipping two evaluation loaders that used different batch sizes.
-        \item Training curves and parameter counts remain valid.
-        \item Post-training visual analyses should be rerun in Colab with the corrected notebook cells.
+        \item DHVT stays ahead on precision, recall, and F1, so its advantage is not metric-specific.
+        \item This confirms stronger class discrimination and better balance between false positives and false negatives.
     \end{itemize}
+\end{frame}
+
+\begin{frame}{DHVT Attention Visualization}
+    \centering
+    \includegraphics[width=0.4\linewidth]{../report/figures/09_dhvt_attention_visualization.png}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item The attention maps provide an interpretable view of where DHVT focuses.
+        \item In representative samples, the attention is concentrated on the main object rather than the background.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Strengths and Limitations}
+    \begin{table}
+        \centering
+        \begin{tabular}{p{2.3cm}p{4.1cm}p{4.1cm}}
+            \toprule
+            Model & Strengths & Limitations \\
+            \midrule
+            AlexNet & Clear baseline, easier to understand, strong local inductive bias & Lower accuracy here, weaker global modeling, very large classifier and high parameter count \\
+            DHVT & Better accuracy, broader class-level gains, better calibration, global token interaction & More complex architecture, more sensitive to training setup, usually harder to tune and explain \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
 \end{frame}
 
 \section{Conclusion}
 
 \begin{frame}{Conclusion}
     \begin{itemize}
-        \item DHVT is the stronger model in the current experiment.
-        \item It achieves better validation accuracy while using fewer parameters than AlexNet.
-        \item The notebook now supports training, saving, reloading, inference, and visual comparison in one workflow.
-        \item The project also shows that model evaluation should include curves, confidence behavior, and qualitative error analysis.
+        \item DHVT is the stronger model in this experiment.
+        \item It improves validation accuracy, macro metrics, and calibration while using fewer parameters.
+        \item The gain is visible in curves, class-level results, agreement analysis, and attention visualization.
+        \item A fair comparison needs multiple views of evaluation and must also discuss the limitations of both model families.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Future Work}
     \begin{itemize}
-        \item Rerun the corrected post-training analysis cells and refresh the exported figures.
         \item Extend the comparison to another dataset such as CIFAR-100 or a custom image folder.
-        \item Add transformer-specific visualizations such as attention maps after the evaluation pipeline is stable.
+        \item Add a dedicated calibration slide with reliability-diagram comparison for both models.
+        \item Study whether the same pattern remains true under longer training, stronger augmentation, and different compute budgets.
     \end{itemize}
 \end{frame}
 

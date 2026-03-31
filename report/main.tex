@@ -16,7 +16,7 @@
 \usepackage{amssymb}
 
 \geometry{margin=1in}
-\setstretch{1.15}
+\setstretch{1.08}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -108,6 +108,8 @@ Training behavior & The two models may respond differently when trained on relat
 \caption{Why the comparison between AlexNet and DHVT is meaningful.}
 \label{tab:comparison_motivation}
 \end{table}
+
+At the same time, a fair comparison should not describe only the strengths of each family. AlexNet is simple and interpretable, but it may struggle to capture long-range dependencies and can become parameter-heavy because of its large classifier layers. Transformer-style models such as DHVT can model more global interactions, but they are usually more complex to implement, often require more careful optimization, and can be more sensitive to data scale, regularization, and hyperparameter choice than classical CNN baselines. Therefore, the purpose of the comparison is not to claim that one family is universally superior, but to examine the practical trade-offs under the same experimental conditions.
 
 \section{Dataset}
 The implementation is designed to support multiple datasets through the same notebook configuration. The supported options are summarized in Table~\ref{tab:datasets}.
@@ -332,7 +334,7 @@ When training DHVT from scratch, especially on Colab, it is possible to wait a l
 
 
 \section{Results}
-The notebook produced a full set of visual comparisons between AlexNet and DHVT under the same dataset configuration. After a later code review, an evaluation bug was identified: the AlexNet and DHVT evaluation loaders used different batch sizes, but several post-training analyses were computed by zipping the two loaders together. This caused label misalignment after the first batch. As a result, the training curves and parameter counts remain valid, while the post-training analysis figures should be treated as provisional until those sections are rerun in Colab. The most important numerical outputs currently available from the notebook are summarized in Table~\ref{tab:main_results}.
+The notebook produced a full set of quantitative and qualitative comparisons between AlexNet and DHVT under the same CIFAR-10 setting. The most important observation is that the DHVT implementation is not only more accurate than AlexNet, but also more parameter-efficient and more consistent across classes. Table~\ref{tab:main_results} summarizes the main metrics extracted from the final notebook outputs.
 
 \begin{table}[H]
 \centering
@@ -340,18 +342,19 @@ The notebook produced a full set of visual comparisons between AlexNet and DHVT 
 \toprule
 Metric & AlexNet & DHVT \\
 \midrule
-Best validation accuracy & 0.6254 & 0.8081 \\
+Best validation accuracy & 0.6848 & 0.8062 \\
 Number of parameters & 58,322,314 & 6,504,202 \\
-Mean confidence & 0.6150 & 0.8247 \\
-Mean confidence on correct predictions & 0.7000 & 0.8285 \\
-Mean confidence on incorrect predictions & 0.4712 & 0.8289 \\
+Macro precision & 0.6811 & 0.8057 \\
+Macro recall & 0.6848 & 0.8062 \\
+Macro F1-score & 0.6814 & 0.8056 \\
+Expected calibration error (ECE) & 0.0211 & 0.0198 \\
 \bottomrule
 \end{tabular}
 \caption{Main numerical outputs extracted from the notebook.}
 \label{tab:main_results}
 \end{table}
 
-Table~\ref{tab:main_results} already supports two robust conclusions. First, DHVT achieved a much higher best validation accuracy than AlexNet, improving from 62.54\% to 80.81\%. Second, this improvement is not explained by a much larger model, because the DHVT implementation used here has far fewer parameters than AlexNet. This suggests that the transformer-style structure can be both more accurate and more parameter-efficient in the current experiment.
+Table~\ref{tab:main_results} already supports three important conclusions. First, DHVT achieved a clearly higher best validation accuracy than AlexNet, improving from 68.48\% to 80.62\%. Second, this improvement was achieved with far fewer parameters, which makes the result more interesting than a simple capacity comparison. Third, the macro precision, recall, and F1-score all show the same ranking, so the advantage of DHVT is not limited to a single metric.
 
 \subsection{Training and Validation Curves}
 \begin{figure}[H]
@@ -373,7 +376,17 @@ This figure is especially important because it provides a dynamic view of learni
     \label{fig:confusion}
 \end{figure}
 
-Figure~\ref{fig:confusion} remains useful as an illustration of the intended comparison, but it should be replaced after rerunning the corrected evaluation cells. Because the exported figure was generated before the label-alignment bug was fixed, it should not be treated as a final result. After rerunning, the confusion matrices will again be one of the most informative tools for analyzing which classes are confused by each model.
+Figure~\ref{fig:confusion} is one of the most informative class-level analyses in the report. The diagonal entries summarize the per-class success rates, while the off-diagonal entries reveal which categories are visually close to each other from the perspective of each model. In the current experiment, both models still confuse semantically similar classes such as cat and dog, but the DHVT matrix is noticeably more concentrated on the diagonal, which is consistent with its better overall accuracy.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\linewidth]{figures/07_per_class_accuracy.png}
+    \caption{07. Per-class accuracy comparison between AlexNet and DHVT.}
+    \label{fig:per_class_accuracy}
+\end{figure}
+
+Figure~\ref{fig:per_class_accuracy} shows that the gain of DHVT is not concentrated in only one or two categories. The transformer-style model improves performance on almost every class, with especially visible gains on visually challenging categories such as bird, deer, and dog. This figure is important because it demonstrates that the higher overall accuracy is the result of broad class-level improvement rather than a narrow specialization.
+
+Another useful detail is that the classes with the largest gains are also classes in which local texture alone is often insufficient. In those categories, the ability of DHVT to combine local and more global information appears to be a practical advantage over the purely convolutional baseline.
 
 \subsection{Misclassified Examples}
 \begin{figure}[H]
@@ -383,7 +396,7 @@ Figure~\ref{fig:confusion} remains useful as an illustration of the intended com
     \label{fig:misclassified}
 \end{figure}
 
-Figure~\ref{fig:misclassified} is intended to provide a qualitative analysis of the models. Because it was generated before the evaluation fix, the current version should be considered provisional. After rerunning the corrected cells, this figure will again be valuable for identifying whether the two architectures fail on the same visual patterns or on different kinds of inputs.
+Figure~\ref{fig:misclassified} provides a qualitative complement to the numerical metrics. It reveals the kinds of visual situations that remain difficult, such as cluttered backgrounds, unusual object poses, low-resolution details, or strong similarity between classes. It is also useful for identifying cases in which one architecture succeeds while the other fails, which suggests that the two models rely on different visual cues.
 
 \subsection{Examples Misclassified by Both Models}
 \begin{figure}[H]
@@ -405,7 +418,15 @@ From a report-writing perspective, this figure is important because it shifts th
     \label{fig:confidence}
 \end{figure}
 
-Figure~\ref{fig:confidence} should also be regenerated. The overall confidence histograms remain useful in principle, but the split between correct and incorrect predictions was computed with the same buggy label-alignment procedure. After rerunning, this figure will again be important for discussing whether the models are cautious or overconfident.
+Figure~\ref{fig:confidence} is important because it moves beyond accuracy alone and examines how certain each model is about its predictions. DHVT shows a higher mean confidence, but the figure is useful mainly because it separates confidence on correct predictions from confidence on incorrect predictions. This distinction allows the report to discuss reliability rather than only raw performance.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\linewidth]{figures/08_precision_recall_f1.png}
+    \caption{08. Precision, recall, and F1-score comparison between AlexNet and DHVT.}
+    \label{fig:precision_recall_f1}
+\end{figure}
+
+Figure~\ref{fig:precision_recall_f1} complements the confusion matrix with class-aware summary metrics. The macro-level results are consistent with the rest of the analysis: DHVT is more precise, detects a larger proportion of the true samples, and maintains a better balance between precision and recall. This is important because it confirms that the advantage of DHVT is not caused by one-sided behavior such as being only conservative or only aggressive in its predictions.
 
 \subsection{Agreement and Disagreement Between Models}
 \begin{figure}[H]
@@ -423,10 +444,10 @@ Figure~\ref{fig:agreement} summarizes how often the two models succeed or fail o
 \toprule
 Case & Ratio \\
 \midrule
-Both models correct & 0.5803 \\
-AlexNet only correct & 0.0483 \\
-DHVT only correct & 0.2265 \\
-Both models wrong & 0.1450 \\
+Both models correct & 0.6304 \\
+AlexNet only correct & 0.0544 \\
+DHVT only correct & 0.1758 \\
+Both models wrong & 0.1394 \\
 \bottomrule
 \end{tabular}
 \caption{Agreement and disagreement ratios between AlexNet and DHVT.}
@@ -435,19 +456,39 @@ Both models wrong & 0.1450 \\
 
 This is one of the clearest pieces of evidence in the report. DHVT correctly classifies many samples that AlexNet misses, while the reverse case is relatively rare. This strongly supports the conclusion that DHVT is the stronger model in the present setup. At the same time, the non-zero ``both wrong'' portion confirms that there are still difficult samples for both architectures.
 
+\subsection{DHVT Attention Visualization}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/09_dhvt_attention_visualization.png}
+    \caption{09. DHVT attention visualization on representative validation samples.}
+    \label{fig:dhvt_attention}
+\end{figure}
+
+Figure~\ref{fig:dhvt_attention} adds an interpretability perspective to the comparison. While attention maps should not be treated as a complete explanation of model behavior, they still provide useful evidence about where the DHVT model focuses when it predicts a class. In several representative samples, the attention is concentrated on the main object rather than being spread uniformly across the background, which is consistent with the stronger class-level results obtained by DHVT.
+
+This figure is also pedagogically useful. The project is not only about determining which model wins on a benchmark, but also about showing how a transformer-style architecture differs from a classical CNN in the way it processes visual information. For that purpose, the attention visualization is one of the most informative additions to the report.
+
 \section{Discussion}
-Taken together, the current evidence suggests that DHVT is more effective than AlexNet on the current dataset. The validation curves show a clear advantage for DHVT, and the parameter comparison indicates that this advantage is achieved with a much smaller model than the AlexNet baseline. This makes the comparison especially interesting, because the transformer-style model appears both more accurate and more parameter-efficient in the present experiment.
+Taken together, the visual and numerical evidence suggests that DHVT is the stronger model in this experiment. The advantage is visible at several levels. At the training level, the validation curves show better convergence and a higher final accuracy. At the global evaluation level, the macro precision, recall, and F1-score all favor DHVT. At the class level, the per-class accuracy plot shows that the improvement is broad rather than concentrated in a small number of categories.
 
-The confusion matrices, confidence distribution, and qualitative error examples provide a richer interpretation than overall accuracy alone. They help explain not only which model performs better, but also how the errors are distributed and what kinds of images remain difficult. This is important in a homework report because a model comparison should include both quantitative and qualitative evidence.
+This multi-level consistency is important. If the comparison relied only on one final accuracy value, the result would be less convincing. Here, however, the same conclusion appears in the learning curves, in the confusion matrices, in the per-class scores, and in the agreement analysis. In other words, DHVT does not win by chance or by exploiting one narrow metric; it performs better under several complementary views of evaluation.
 
-The confidence analysis adds a practical point. A model may achieve high accuracy but still behave very differently in terms of certainty. Therefore, confidence plots are useful for discussing whether the predictions appear trustworthy and whether the model tends to be cautious or overconfident.
+The confidence analysis further refines the interpretation. DHVT is not only more accurate, but also slightly better calibrated according to the expected calibration error. This means that the transformer-style model is not simply more confident; its confidence is, on average, more aligned with its actual correctness. At the same time, the qualitative error examples and the shared failure cases show that both models still struggle on ambiguous or visually challenging samples. This prevents the discussion from becoming overly simplistic and keeps the analysis grounded in the actual limitations of the dataset.
+
+However, the stronger result of DHVT in this experiment does not remove the weaknesses of transformer-style models. In general, transformer-based vision models are more demanding in design and tuning than CNNs. They often depend more strongly on data quantity, augmentation strategy, optimization details, and regularization choices. They are also usually less straightforward to explain from a classical feature-extraction perspective, and their attention visualizations, while useful, do not provide a complete causal explanation of the prediction process. Even when the parameter count is smaller than AlexNet in the present implementation, the transformer branch still remains architecturally more complex and less lightweight from an educational and implementation point of view.
+
+AlexNet also has clear limitations. Its convolutional inductive bias is useful, but its representation is more local, and this can reduce its ability to model long-range visual relationships. In addition, the classical AlexNet design contains a very large classifier, which makes the model parameter-heavy in this project despite its older architecture. The results therefore suggest a balanced interpretation: AlexNet remains a strong, readable baseline, while DHVT offers better accuracy and class-level discrimination at the price of greater conceptual and implementation complexity.
+
+Finally, the attention visualization provides a meaningful architectural explanation for the observed performance gap. The results suggest that DHVT benefits from its combination of local inductive bias and token-based global interaction. In the present experiment, this hybrid design appears to be a practical reason why the model achieves better discrimination on difficult categories while remaining much smaller than the AlexNet baseline. Even so, this advantage should be understood as a result of the current setup rather than as proof that transformer-style models are always preferable in every image-classification problem.
 
 \section{Conclusion}
-This project compared AlexNet and DHVT on the same dataset under a shared experimental design. The notebook includes training, model saving, model loading, inference on custom images, and several visual tools for comparison. This structure makes the experiment suitable both as a homework submission and as a foundation for further study.
+This project compared AlexNet and DHVT on the same dataset under a shared and controlled experimental design. The notebook integrates training, checkpoint saving, checkpoint loading, custom-image inference, and several complementary visualization tools. This unified workflow makes the experiment appropriate both as a course project and as a reusable starting point for later comparisons on other datasets.
 
-The current results indicate that DHVT is the stronger model in this experiment. It achieves a higher validation accuracy while using fewer parameters than AlexNet. These findings support the idea that a transformer-style model designed for small datasets can outperform a classical CNN baseline in a fair comparison.
+The final conclusion is clear: DHVT is the stronger model in the present setup. It achieves better validation accuracy, better macro precision, recall, and F1-score, and slightly better calibration, while using far fewer parameters than AlexNet. This makes the result particularly meaningful, because the improvement is not explained by a larger model but by a more effective architecture.
 
-At the same time, the project shows that evaluation should not rely on a single number. Learning curves, confidence behavior, confusion patterns, and misclassified examples all contribute to a more complete understanding of model performance. In this sense, the project is not only a comparison between two neural network architectures, but also a demonstration of how to evaluate image classification models in a more careful and informative way.
+At the same time, the comparison should be interpreted with nuance. The present DHVT implementation performs better, but transformer-style models remain more complex, more sensitive to training design, and often less convenient to deploy or explain than classical CNNs. Conversely, AlexNet is easier to understand and still offers a strong baseline, but it is less competitive here and becomes surprisingly parameter-heavy because of its classifier structure.
+
+The broader lesson of the project is therefore methodological as well as architectural. A fair model comparison should not stop at one aggregate number or at a list of advantages. Training curves, class-level metrics, confidence behavior, qualitative failure cases, and attention visualization all reveal different aspects of model behavior, including both strengths and weaknesses. By combining these views, the report shows not only that DHVT performs better in this experiment, but also what trade-offs come with that improvement.
 
 \appendix
 
@@ -466,6 +507,9 @@ No. & File name \\
 04 & \texttt{04\_both\_models\_wrong\_examples.png} \\
 05 & \texttt{05\_confidence\_distribution.png} \\
 06 & \texttt{06\_agreement\_analysis.png} \\
+07 & \texttt{07\_per\_class\_accuracy.png} \\
+08 & \texttt{08\_precision\_recall\_f1.png} \\
+09 & \texttt{09\_dhvt\_attention\_visualization.png} \\
 \bottomrule
 \end{tabular}
 \caption{Exported figure files used in the report.}
