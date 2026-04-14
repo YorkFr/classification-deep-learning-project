@@ -14,6 +14,7 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{cite}
 
 \geometry{margin=1in}
 \setstretch{1.08}
@@ -24,32 +25,41 @@
     citecolor=blue
 }
 
-\title{Comparison of AlexNet and DHVT\\on the Same Image Classification Dataset}
-\author{Your Name}
+\title{Comparaison d'AlexNet et de DHVT\\sur plusieurs jeux de donn\'ees de classification d'images}
+\author{Haobo YANG (22513870) \and Zhenyu Xu (22508276)}
 \date{\today}
 
 \begin{document}
 
 \begin{titlepage}
     \centering
-    \vspace*{2cm}
+    \vspace*{1.5cm}
 
-    {\Large Deep Learning for Image Classification\par}
-    \vspace{1.5cm}
+    {\Large Université Paris Cité\par}
+    \vspace{0.3cm}
+    {\large Deep Learning\par}
+    \vspace{0.2cm}
+    {\normalsize Année universitaire 2025--2026\par}
+    \vspace{1.2cm}
 
-    {\huge\bfseries Comparison of AlexNet and DHVT\par}
-    \vspace{0.5cm}
-    {\Large on the Same Image Classification Dataset\par}
-    \vspace{2cm}
+    {\color{gray}\rule{0.8\linewidth}{0.8pt}\par}
+    \vspace{1.2cm}
 
-    {\Large Report\par}
-    \vspace{1.5cm}
+    {\huge\bfseries Comparaison d'AlexNet et de DHVT\par}
+    \vspace{0.6cm}
+    {\Large sur plusieurs jeux de donn\'ees de classification d'images\par}
+    \vspace{0.8cm}
+    {\large Rapport de projet\par}
+    \vspace{1.2cm}
 
-    \begin{tabular}{ll}
-        Student: & Your Name \\
-        Course: & Course Name \\
-        Instructor: & Instructor Name \\
-        Date: & \today \\
+    {\color{gray}\rule{0.8\linewidth}{0.8pt}\par}
+    \vspace{1.6cm}
+
+    \begin{tabular}{rl}
+        \'Etudiants : & Haobo YANG (22513870) \\
+         & Zhenyu XU (22508276) \\
+        Cours : & Deep Learning \\
+        Remise : & \today \\
     \end{tabular}
 
     \vfill
@@ -58,171 +68,144 @@
 \tableofcontents
 \newpage
 
-\begin{abstract}
-This report presents a comparative study of AlexNet and DHVT under the same dataset setting. The goal is to compare a classical convolutional neural network with a transformer-style architecture using the same data configuration, evaluation pipeline, and custom test images. The report introduces the dataset, explains the structure of both models, summarizes the training procedure, discusses the main implementation challenges, and analyzes the visual evidence used to compare the two approaches.
-\end{abstract}
-
 \section{Introduction}
-Image classification is one of the most fundamental tasks in computer vision. A classification model receives an input image and predicts the most likely class among a predefined set of categories. In this project, the aim is not only to train a model, but also to compare two different families of architectures: convolutional neural networks and transformer-based models.
+La classification d'images est l'une des t\^aches classiques de la vision par ordinateur. Un mod\`ele re\c coit une image en entr\'ee et doit pr\'edire la classe la plus probable parmi un ensemble de cat\'egories fix\'ees \`a l'avance. Dans ce projet, l'objectif n'est pas uniquement d'entra\^\i ner un mod\`ele performant, mais de comparer deux familles d'architectures dans un cadre exp\'erimental simple : les r\'eseaux convolutionnels et les architectures de type transformer.
 
-The first model is AlexNet, a historically important convolutional neural network that played a major role in the development of deep learning for vision. The second model is DHVT, a transformer-style architecture designed for small datasets. Comparing these two models on the same dataset makes it possible to study the difference between a classical CNN and a more recent token-based architecture under a fairer and more controlled setting.
+Le premier mod\`ele \'etudi\'e est AlexNet, un r\'eseau convolutionnel important dans l'histoire du deep learning appliqu\'e \`a la vision~\cite{alexnet}. Le second est DHVT (\textit{Dynamic Hybrid Vision Transformer}), une architecture propos\'ee pour am\'eliorer l'efficacit\'e des Vision Transformers sur des jeux de donn\'ees de petite taille~\cite{dhvt}. Nous avons choisi de partir de jeux de donn\'ees standards puis de construire des variantes visuelles plus cibl\'ees, afin d'observer plus clairement les diff\'erences entre les deux approches.
 
-\section{Project Objectives}
-The main objectives of this project are summarized in Table~\ref{tab:objectives}.
+\section{Objectifs du projet}
+Ce projet poursuit trois objectifs. Le premier est de comparer AlexNet et DHVT sur plusieurs jeux de donn\'ees de classification d'images, afin d'observer comment ces deux approches se comportent lorsque la difficult\'e augmente.
 
-\begin{table}[H]
-\centering
-\begin{tabular}{p{1.5cm}p{11.5cm}}
-\toprule
-No. & Objective \\
-\midrule
-1 & Train an AlexNet-based model on a selected image classification dataset. \\
-2 & Train a DHVT model on the same dataset. \\
-3 & Save and reload the trained weights for both models. \\
-4 & Run inference on personal images stored in a custom test folder. \\
-5 & Compare the two models under the same dataset configuration. \\
-\bottomrule
-\end{tabular}
-\caption{Main project objectives.}
-\label{tab:objectives}
-\end{table}
+Le deuxi\`eme objectif consiste \`a concevoir ou modifier des jeux de donn\'ees de mani\`ere \`a faire appara\^\i tre des diff\'erences de comportement entre CNN et transformers. Nous n'avons donc pas seulement utilis\'e des benchmarks standards ; nous avons aussi construit un petit benchmark d\'eriv\'e de CIFAR-100 avec plusieurs variantes visuelles.
 
-\section{Why Compare AlexNet and DHVT}
-AlexNet is a classical CNN architecture that relies on convolution, pooling, and fully connected layers. It is easier to interpret from a traditional computer vision perspective because it extracts local features progressively through stacked convolutional layers.
+Le troisi\`eme objectif est plus pratique. Nous voulions impl\'ementer nous-m\^emes le pipeline d'entra\^\i nement en PyTorch, et reprendre les id\'ees principales de DHVT \`a partir de l'article~\cite{dhvt}, dans une version adapt\'ee au cadre du projet.
 
-DHVT, on the other hand, processes an image through token embeddings and attention-based interactions while still keeping inductive bias for small datasets. This makes it conceptually different from CNNs and particularly interesting for comparison.
+\section{Pourquoi comparer AlexNet et DHVT}
+Comparer AlexNet et DHVT est pertinent parce que les deux mod\`eles ne traitent pas l'information visuelle de la m\^eme mani\`ere. AlexNet repr\'esente une approche convolutionnelle classique, qui s'appuie fortement sur les voisinages spatiaux et les motifs de texture. DHVT, au contraire, appartient \`a la famille des Vision Transformers, tout en y ajoutant des m\'ecanismes destin\'es \`a mieux fonctionner lorsque les donn\'ees sont moins abondantes~\cite{dhvt}.
 
-This comparison is useful because it highlights the differences summarized in Table~\ref{tab:comparison_motivation}.
+Dans le cadre du projet, ViT sert surtout de point de rep\`ere pour situer DHVT~\cite{vit,dhvt}. En pratique, nos exp\'eriences portent bien sur deux mod\`eles : AlexNet et DHVT. L'int\'er\^et de cette comparaison est donc de voir si une architecture de type transformer, renforc\'ee par quelques m\'ecanismes suppl\'ementaires, peut rivaliser avec un CNN sur de petits jeux de donn\'ees et sur des variantes visuelles construites pour le test.
+
+Le tableau~\ref{tab:comparison_motivation} r\'esume les diff\'erences structurelles les plus utiles pour situer les approches avant l'analyse exp\'erimentale.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{p{5cm}p{8cm}}
+\begin{tabular}{p{3cm}p{3cm}p{3cm}p{5.4cm}}
 \toprule
-Aspect & Comparison meaning \\
+\`A quel niveau ? & AlexNet & ViT & DHVT \\
 \midrule
-Classical baseline & AlexNet represents a convolutional architecture with strong inductive bias for images. \\
-Modern architecture & DHVT represents a transformer-style model with attention-based token interactions. \\
-Training behavior & The two models may respond differently when trained on relatively small or medium datasets. \\
+Logique g\'en\'erale & CNN classique. & Transformer de r\'ef\'erence. & Transformer hybride pens\'e pour petit dataset. \\
+Entr\'ee & Convolutions locales. & Patch embedding direct. & \hyperref[subsec:sope]{SOPE} ajoute une entr\'ee plus locale et recouvrante. \\
+Attention & Pas d'attention explicite. & MHSA standard. & \hyperref[subsec:himhsa]{HI-MHSA} ajoute des head tokens pour structurer l'agr\'egation globale. \\
+Bloc interne & Blocs convolutionnels. & MLP standard. & \hyperref[subsec:daff]{DAFF} ajoute depthwise convolution et recalibrage du class token. \\
+Id\'ee principale & Mod\`ele simple \`a lire. & Mod\`ele global mais plus exigeant. & Corriger certaines limites de ViT sans revenir \`a un CNN pur. \\
 \bottomrule
 \end{tabular}
-\caption{Why the comparison between AlexNet and DHVT is meaningful.}
+\caption{Rep\`eres structurels entre AlexNet, ViT et DHVT.}
 \label{tab:comparison_motivation}
 \end{table}
 
-At the same time, a fair comparison should not describe only the strengths of each family. AlexNet is simple and interpretable, but it may struggle to capture long-range dependencies and can become parameter-heavy because of its large classifier layers. Transformer-style models such as DHVT can model more global interactions, but they are usually more complex to implement, often require more careful optimization, and can be more sensitive to data scale, regularization, and hyperparameter choice than classical CNN baselines. Therefore, the purpose of the comparison is not to claim that one family is universally superior, but to examine the practical trade-offs under the same experimental conditions.
+\section{Jeu de donn\'ees}
+Nous avons utilis\'e trois cadres exp\'erimentaux. Les deux premiers reposent sur des jeux de donn\'ees standards, CIFAR-10 et CIFAR-100. Ils servent \`a \'etablir une comparaison de base entre les deux architectures, d'abord sur une t\^ache simple, puis sur une classification plus fine.
 
-\section{Dataset}
-The implementation is designed to support multiple datasets through the same notebook configuration. The supported options are summarized in Table~\ref{tab:datasets}.
+Le troisi\`eme cadre repose sur un petit benchmark construit \`a partir de CIFAR-100, en s\'electionnant 12 classes (\texttt{bridge}, \texttt{bus}, \texttt{castle}, \texttt{leopard}, \texttt{orchid}, \texttt{poppy}, \texttt{road}, \texttt{rose}, \texttt{skyscraper}, \texttt{tiger}, \texttt{train}, \texttt{willow\_tree}), avec 80 images d'entra\^\i nement et 30 images de validation par classe. Le sous-ensemble est construit avec une graine fixe afin de garder la m\^eme s\'election pour tous les essais.
+
+Sur ce sous-ensemble, nous avons d\'efini quatre variantes :
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{clean} : sous-ensemble \'equilibr\'e sans transformation suppl\'ementaire ;
+    \item \texttt{texture} : m\'elange local de patches afin d'affaiblir la structure globale tout en conservant une partie de l'information texturale ;
+    \item \texttt{long\_range} : r\'eduction forte de la r\'esolution puis remont\'ee \`a la taille initiale, pour supprimer les d\'etails fins et ne garder qu'une structure plus grossi\`ere ;
+    \item \texttt{damaged\_occluded} : masquage partiel et d\'egradation d'une zone de l'image.
+\end{itemize}
+
+L'id\'ee n'est pas de proposer un benchmark g\'en\'eral, mais de construire des conditions visuelles simples qui rendent les diff\'erences plus lisibles. L'objectif est de disposer d'un cadre o\`u les r\'eactions respectives des CNN et des architectures de type transformer puissent \^etre observ\'ees plus directement.
+
+Les principaux jeux de donn\'ees utilis\'es dans les exp\'eriences finales sont r\'esum\'es dans le tableau~\ref{tab:datasets}.
 
 \begin{table}[H]
 \centering
 \begin{tabular}{p{4cm}p{9cm}}
 \toprule
-Dataset option & Description \\
+Option & Description \\
 \midrule
-\texttt{CIFAR-10} & Standard 10-class dataset used for baseline comparison. \\
-\texttt{CIFAR-100} & Fine-grained 100-class dataset with the same image format. \\
-\texttt{custom\_folder} & Folder-based dataset using the structure \texttt{train/class\_name/...} and \texttt{val/class\_name/...}. \\
+\texttt{CIFAR-10} & Jeu de donn\'ees standard \`a 10 classes, utilis\'e comme base principale de comparaison. \\
+\texttt{CIFAR-100} & Jeu de donn\'ees \`a 100 classes, plus fin et plus difficile, avec le m\^eme format d'image. \\
+\texttt{CIFAR-100 modifi\'e} & Sous-ensemble contr\^ol\'e de CIFAR-100 avec variantes \texttt{clean}, \texttt{texture}, \texttt{damaged\_occluded} et \texttt{long\_range}. \\
 \bottomrule
 \end{tabular}
-\caption{Dataset options supported by the notebook.}
+\caption{Principaux jeux de donn\'ees utilis\'es dans les exp\'eriences finales.}
 \label{tab:datasets}
 \end{table}
 
-This flexibility is important because it allows the same comparison notebook to be reused without changing the global experimental structure. For a fair comparison, both AlexNet and DHVT are trained and evaluated on the same dataset choice.
+Dans tous les cas, les deux mod\`eles sont entra\^\i n\'es et \'evalu\'es sur le m\^eme split pour un jeu de donn\'ees donn\'e. Cela permet de comparer les comportements observ\'es sans changer simultan\'ement les donn\'ees et l'architecture.
 
-\section{Model Description}
+\section{Modules essentiels de DHVT}
+Cette partie pr\'esente les principaux modules de DHVT, utiles pour comprendre nos r\'esultats~\cite{dhvt}. Dans notre impl\'ementation, nous avons repris les trois composants principaux : SOPE, HI-MHSA et DAFF. 
 
-\subsection{AlexNet}
-AlexNet is a deep convolutional neural network composed of several convolutional layers followed by pooling operations and fully connected layers. In this project, the AlexNet-style model includes:
-\begin{itemize}[leftmargin=1.2cm]
-    \item convolutional layers for feature extraction,
-    \item ReLU activations for non-linearity,
-    \item max-pooling layers for spatial reduction,
-    \item adaptive average pooling before the classifier,
-    \item fully connected layers for final classification.
-\end{itemize}
+\subsection{Module SOPE}
+\label{subsec:sope}
+Le module SOPE (\textit{Shared Overlapped Patch Embedding}) remplace le d\'ecoupage direct de l'image en patches non recouvrants par une extraction progressive fond\'ee sur des convolutions avec stride. L'id\'ee est de conserver davantage d'information locale au moment de former les tokens envoy\'es au transformer.
 
-AlexNet is well suited for educational purposes because its structure is clear and interpretable. Even though it is an older architecture, it remains useful as a strong baseline for image classification tasks.
-
-\subsubsection{Mathematical view of convolution}
-For an input feature map $X$ and a convolution kernel $K$, the output at position $(i,j)$ can be written as:
-\[
-Y_{i,j} = \sum_{u}\sum_{v} K_{u,v} \cdot X_{i+u,j+v}.
-\]
-This operation allows the network to detect local patterns such as edges, textures, and shapes. After convolution, the non-linear activation is applied:
-\[
-\mathrm{ReLU}(x) = \max(0, x).
-\]
-Pooling then reduces the spatial resolution while preserving the strongest responses.
-
-\subsection{DHVT: Dynamic Hybrid Vision Transformer}
-The main transformer-style model retained for the report is a DHVT-inspired architecture trained from scratch. Its purpose is to better adapt transformer ideas to smaller datasets. The implementation used in the notebook is composed of the following elements:
-\begin{itemize}[leftmargin=1.2cm]
-    \item a \textbf{Shared Overlapped Patch Embedding} (SOPE) module;
-    \item a class token and positional embeddings;
-    \item repeated DHVT blocks;
-    \item head-token based attention;
-    \item a DAFF module used inside each block;
-    \item a final linear classifier.
-\end{itemize}
-
-\subsubsection{SOPE module}
-Instead of directly flattening non-overlapping patches, SOPE uses convolutional layers with stride to create embedded patch tokens. If the input image is denoted by
+On note l'image d'entr\'ee
 \[
 X \in \mathbb{R}^{B \times C \times H \times W},
 \]
-then the SOPE block produces a tensor
+o\`u $B$ d\'esigne la taille du batch, $C$ le nombre de canaux de l'image, $H$ sa hauteur et $W$ sa largeur. Apr\`es le passage dans SOPE, on obtient un tenseur
 \[
 E \in \mathbb{R}^{B \times N \times d},
 \]
-where $N$ is the number of embedded tokens and $d$ is the embedding dimension.
+o\`u $N$ est le nombre total de tokens produits pour chaque image et $d$ la dimension d'embedding de chaque token. Autrement dit, pour chaque image du batch, SOPE transforme une grille de pixels de taille $C \times H \times W$ en une s\'equence de $N$ vecteurs de dimension $d$.
 
-This approach introduces useful locality before the transformer blocks and is therefore better suited to small datasets than a purely patch-based tokenization.
+L'int\'er\^et principal de SOPE est de faire intervenir davantage l'information locale d\`es l'entr\'ee du mod\`ele. Sur de petites images et avec peu de donn\'ees, cela peut aider \`a pr\'eserver des d\'etails utiles d\`es les premi\`eres couches.
 
-\subsubsection{Class token and positional encoding}
-After the patch tokens are created, a learnable class token is concatenated:
+\subsection{M\'ecanisme d'attention}
+\label{subsec:himhsa}
+Dans un ViT standard, l'attention multi-t\^etes (\textit{Multi-Head Self-Attention}, MHSA) part d'une s\'equence de tokens
 \[
-Z_0 = [x_{\text{cls}}; E].
+Z \in \mathbb{R}^{B \times M \times d},
 \]
-Then positional embeddings are added:
-\[
-Z = Z_0 + P,
-\]
-where $P$ is a learnable positional embedding matrix. This gives the model information about the spatial arrangement of the tokens.
-
-\subsubsection{DHVT block}
-Each DHVT block contains a head-token style self-attention layer followed by a DAFF module. The residual structure can be summarized as:
-\[
-Z' = Z + \mathrm{MHSA}(\mathrm{LN}(Z)),
-\]
-\[
-Z'' = Z' + \mathrm{DAFF}(\mathrm{LN}(Z')).
-\]
-Here, $\mathrm{LN}$ is layer normalization and $\mathrm{MHSA}$ denotes multi-head self-attention.
-
-\subsubsection{Attention mechanism}
-For query, key, and value matrices, the model uses:
-\[
-Q = ZW_Q,\quad K = ZW_K,\quad V = ZW_V.
-\]
-The attention output is:
+o\`u $B$ est la taille du batch, $M$ le nombre total de tokens dans la s\'equence, et $d$ la dimension d'embedding. \`A partir de cette s\'equence, on calcule les projections \textit{query}, \textit{key} et \textit{value}, puis la sortie s'\'ecrit
 \[
 \mathrm{Attention}(Q,K,V)=\mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V.
 \]
-This formulation allows the model to capture global relationships between image tokens.
+Dans cette expression, $Q$, $K$ et $V$ d\'esignent les tenseurs de requ\^etes, de cl\'es et de valeurs, et $d_k$ la dimension des vecteurs de cl\'e utilis\'ee pour normaliser le produit scalaire $QK^\top$. Cette formulation permet de mod\'eliser des relations globales entre les tokens de l'image, mais elle reste assez g\'en\'erique dans le cas d'un petit dataset.
 
-\subsubsection{DAFF module}
-The DAFF module acts as an enhanced feed-forward stage. In the implementation, it includes:
+Dans DHVT, ce m\'ecanisme est modifi\'e par l'ajout de \textit{head tokens}, qui servent \`a structurer l'information globale avant l'attention. On consid\`ere une s\'equence d'entr\'ee
+\[
+Z = [x_{\text{cls}}; x_1; \dots; x_N] \in \mathbb{R}^{B \times (N+1) \times d},
+\]
+o\`u $x_{\text{cls}}$ est le \textit{class token}, $x_1,\dots,x_N$ les $N$ patch tokens, et $d$ la dimension d'embedding. La dimension $d$ est r\'epartie sur $h$ t\^etes d'attention, et DHVT construit pour chacune d'elles un \textit{head token} suppl\'ementaire \`a partir de l'information moyenne contenue dans la s\'equence. Ces head tokens sont ensuite reprojet\'es dans l'espace de dimension $d$.
+
+La s\'equence envoy\'ee dans l'attention devient alors
+\[
+\tilde{Z} = [x_{\text{cls}}; x_1; \dots; x_N; \tilde{t}_1; \dots; \tilde{t}_h].
+\]
+Elle contient donc $N+1+h$ tokens : le class token, les $N$ patch tokens, puis les $h$ head tokens ajout\'es.
+
+L'attention est alors calcul\'ee sur cette s\'equence enrichie :
+\[
+\mathrm{HI\text{-}MHSA}(\tilde{Z})=
+\mathrm{softmax}\left(\frac{\tilde{Q}\tilde{K}^\top}{\sqrt{d_k}}\right)\tilde{V}.
+\]
+Ici, $\tilde{Q}$, $\tilde{K}$ et $\tilde{V}$ d\'esignent les projections calcul\'ees \`a partir de $\tilde{Z}$. Dans l'esprit du papier, ces \textit{head tokens} servent \`a mieux faire interagir les groupes de canaux associ\'es aux diff\'erentes t\^etes d'attention.
+
+Apr\`es l'attention, la sortie des head tokens est r\'einject\'ee dans le class token par moyenne :
+\[
+x_{\text{cls}}^{\star} = x_{\text{cls}}' + \frac{1}{h}\sum_{i=1}^{h} \tilde{t}_i'.
+\]
+Ici, $x_{\text{cls}}'$ d\'esigne le class token apr\`es le calcul d'attention, $\tilde{t}_i'$ la sortie du $i$-i\`eme head token apr\`es attention, et $x_{\text{cls}}^{\star}$ le class token final utilis\'e ensuite pour la classification. Cette \'etape montre que les head tokens ne servent pas seulement \`a enrichir l'attention : ils participent aussi directement \`a la construction de la repr\'esentation globale finale.
+
+\subsection{Module DAFF}
+\label{subsec:daff}
+Le module DAFF (\textit{Dynamic Adaptive Feed-Forward}) joue le r\^ole d'une couche feed-forward enrichie. Dans l'impl\'ementation, il comprend :
 \begin{itemize}[leftmargin=1.2cm]
-    \item a first linear projection,
-    \item a depthwise convolution,
-    \item a GELU activation,
-    \item a second linear projection,
-    \item a channel-attention style reweighting for the class token.
+    \item une premi\`ere projection lin\'eaire ;
+    \item une convolution depthwise ;
+    \item une activation GELU ;
+    \item une seconde projection lin\'eaire ;
+    \item un recalibrage de type channel-attention appliqu\'e au class token.
 \end{itemize}
 
-If the patch tokens are denoted by $T$, the DAFF stage can be simplified as:
+On note $T$ la matrice des patch tokens en entr\'ee du bloc, c'est-\`a-dire l'ensemble des tokens spatiaux, \`a l'exclusion du class token. On peut r\'esumer le bloc DAFF par :
 \[
 T_1 = W_1 T,
 \]
@@ -232,297 +215,231 @@ T_2 = \mathrm{DWConv}(T_1),
 \[
 T_3 = W_2 \, \mathrm{GELU}(T_2).
 \]
-Then a channel weight vector $w$ is learned and applied to the class token:
+Dans ces trois \'etapes, $W_1$ et $W_2$ d\'esignent deux projections lin\'eaires apprises, et $\mathrm{DWConv}$ une convolution \textit{depthwise} appliqu\'ee s\'epar\'ement par canal afin de r\'eintroduire une interaction locale. On construit ensuite un vecteur de poids de canaux $w$ appliqu\'e au class token :
 \[
 w = \sigma(f(\mathrm{mean}(T_3))),
 \]
 \[
 x_{\text{cls}}' = x_{\text{cls}} \odot w,
 \]
-where $\sigma$ is the sigmoid function and $\odot$ is element-wise multiplication.
+o\`u $\mathrm{mean}(T_3)$ d\'esigne une agr\'egation moyenne sur les patch tokens, $f$ une transformation apprise, $\sigma$ la sigmo\"ide, et $\odot$ le produit \'el\'ement par \'el\'ement. Le vecteur $w$ sert donc de m\'ecanisme de recalibrage canal par canal du class token.
 
-\subsubsection{Final classification}
-After the final DHVT block, the normalized class token is extracted and passed to a linear layer:
-\[
-\hat{y} = W_{\text{head}} x_{\text{cls}}^{(L)} + b.
-\]
-The model is trained with cross-entropy loss:
-\[
-\mathcal{L} = - \sum_{c=1}^{C} y_c \log(\hat{p}_c),
-\]
-where $\hat{p}_c$ is the predicted probability for class $c$ after the softmax function.
+L'int\'er\^et de DAFF est double : conserver une composante locale gr\^ace \`a la convolution \textit{depthwise}, et renforcer le \textit{class token} \`a partir de l'information produite par les patch tokens. Ce module participe ainsi \`a l'id\'ee g\'en\'erale de DHVT : rendre un transformer plus robuste dans le r\'egime \textit{small-data}.
 
-\section{Experimental Method}
-The same global workflow is used for both models, as shown in Table~\ref{tab:workflow}.
+\section{Mise en oeuvre exp\'erimentale}
+Cette partie pr\'esente les choix concrets utilis\'es dans les notebooks finaux. Nous avons cherch\'e \`a garder un protocole simple et homog\`ene : m\^eme split entra\^\i nement/validation, m\^eme budget d'entra\^\i nement, sauvegarde du meilleur checkpoint sur l'accuracy de validation, puis analyse comparative.
+
+\subsection{Workflow g\'en\'eral}
+Le workflow global reste le m\^eme pour les deux mod\`eles, comme indiqu\'e dans le tableau~\ref{tab:workflow}. L'id\'ee \'etait de garder une proc\'edure claire : pr\'eparer les donn\'ees, entra\^\i ner les mod\`eles, sauvegarder les meilleurs poids, puis analyser les r\'esultats avec plusieurs visualisations.
 
 \begin{table}[H]
 \centering
 \begin{tabular}{p{1.5cm}p{11.5cm}}
 \toprule
-Step & Procedure \\
+\'Etape & Proc\'edure \\
 \midrule
-1 & Choose the runtime environment (local or Colab). \\
-2 & Choose the dataset. \\
-3 & Preprocess the images. \\
-4 & Initialize the model. \\
-5 & Train the model. \\
-6 & Evaluate it on the validation set. \\
-7 & Save the best weights. \\
-8 & Reload the saved weights. \\
-9 & Run inference on custom images. \\
+1 & Choisir l'environnement d'ex\'ecution (local ou Colab). \\
+2 & Choisir le jeu de donn\'ees. \\
+3 & Pr\'etraitement des images. \\
+4 & Initialisation du mod\`ele. \\
+5 & Entra\^\i nement du mod\`ele. \\
+6 & \'Evaluation sur l'ensemble de validation. \\
+7 & Sauvegarde des meilleurs poids. \\
+8 & Rechargement des poids sauvegard\'es. \\
+9 & R\'esum\'e comparatif final selon le notebook consid\'er\'e. \\
 \bottomrule
 \end{tabular}
-\caption{Shared workflow for AlexNet and DHVT.}
+\caption{Workflow g\'en\'eral de l'exp\'erience.}
 \label{tab:workflow}
 \end{table}
 
-To make the comparison fair, the dataset, number of epochs, and evaluation procedure are shared across both models.
+Pour que la comparaison reste coh\'erente, AlexNet et DHVT sont toujours entra\^\i n\'es sur le m\^eme jeu de donn\'ees, avec le m\^eme nombre d'\'epoques et les m\^emes r\`egles de s\'election du meilleur mod\`ele. En revanche, le pr\'etraitement des images reste adapt\'e \`a chaque architecture.
 
-\section{Preprocessing}
-Both models use image resizing to \texttt{224}$\times$\texttt{224}, because this resolution is compatible with the selected architectures. Data augmentation is applied during training to improve generalization. The main preprocessing operations are listed in Table~\ref{tab:preprocessing}.
+\subsection{Pr\'etraitement}
+Dans tous les notebooks, AlexNet re\c coit des images redimensionn\'ees en \texttt{224}$\times$\texttt{224}, tandis que DHVT travaille en \texttt{32}$\times$\texttt{32}. Ce choix ne signifie pas que les entr\'ees sont strictement identiques, mais il permet d'utiliser chaque architecture dans un cadre compatible avec sa structure. Les deux branches utilisent une normalisation simple \texttt{(0.5, 0.5, 0.5)}. L'entra\^\i nement repose sur une augmentation mod\'er\'ee des donn\'ees, alors que l'\'evaluation s'effectue avec des transformations fixes.
+
+\subsection{Entra\^\i nement}
+Tous les mod\`eles sont entra\^\i n\'es depuis z\'ero avec AdamW pendant huit \'epoques. Le scheduler utilis\'e est un \textit{Cosine Annealing Learning Rate}. Les batch sizes sont fix\'es de mani\`ere simple pour rester compatibles avec les ressources disponibles. Le meilleur mod\`ele est s\'electionn\'e selon l'accuracy de validation.
+
+Les notebooks ont \'et\'e ex\'ecut\'es sur diff\'erentes plateformes selon les ressources disponibles, mais ce point reste secondaire. L'essentiel est que les trois notebooks suivent le m\^eme principe : comparaison directe des deux architectures, sans pr\'eentra\^\i nement, avec un budget d'entra\^\i nement identique.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{p{5cm}p{8cm}}
+\begin{tabular}{p{5.5cm}p{10cm}}
 \toprule
-Operation & Purpose \\
+Notebook & R\^ole dans le projet \\
 \midrule
-Horizontal flipping & Increase left-right appearance variation. \\
-Small random rotations & Improve robustness to minor orientation changes. \\
-Tensor conversion & Convert input images into tensors for PyTorch. \\
-Normalization & Stabilize training and keep the input range consistent. \\
+\texttt{v3\_CIFAR-10.ipynb} & Exp\'erience de base, comparaison principale sur un jeu simple et analyse qualitative d\'etaill\'ee. \\
+\texttt{v3\_CIFAR-100.ipynb} & M\^eme protocole sur un jeu plus difficile, pour tester la capacit\'e de g\'en\'eralisation sur une classification plus fine. \\
+\texttt{v4\_CIFAR-100\_Variants.ipynb} & Benchmark compl\'ementaire sur plusieurs variantes (\texttt{clean}, \texttt{texture}, \texttt{damaged\_occluded}, \texttt{long\_range}) afin d'observer plus pr\'ecis\'ement les diff\'erences entre AlexNet et DHVT. \\
 \bottomrule
 \end{tabular}
-\caption{Main preprocessing operations used in the notebook.}
-\label{tab:preprocessing}
+\caption{Les trois notebooks remis et leur r\^ole dans l'analyse exp\'erimentale.}
+\label{tab:notebooks_summary}
 \end{table}
 
-Different normalization values are used for AlexNet and ViT. AlexNet follows the simpler normalization adopted in the previous notebook, whereas ViT uses ImageNet normalization because the pretrained backbone was originally trained on ImageNet.
+\section{R\'esultats}
+Dans les trois notebooks, DHVT obtient de meilleurs r\'esultats qu'AlexNet sur les exp\'eriences r\'ealis\'ees. L'\'ecart est d\'ej\`a visible sur CIFAR-10, puis il devient plus net sur CIFAR-100. Sur la version modifi\'ee de CIFAR-100, DHVT garde \'egalement un avantage sur l'ensemble des variantes test\'ees.
 
-\section{Training Strategy}
-For AlexNet, the optimizer is AdamW and the model is trained from scratch on the selected dataset. For DHVT, the model is also trained from scratch, which is consistent with the goal of evaluating a transformer-style architecture adapted to small datasets rather than only relying on transfer learning.
-
-The learning rate scheduler decreases the learning rate during training in order to stabilize optimization. Validation accuracy is monitored after every epoch, and the best model weights are saved separately from the last model weights.
-
-\section{Main Difficulties Encountered}
-Several practical and conceptual difficulties appeared during the project.
-
-\subsection{Difficulty 1: Comparing Two Models Fairly}
-At first, using two different notebooks or two different datasets would have made the comparison less meaningful. If the data are not the same, the final conclusions about AlexNet and DHVT are weaker.
-
-\textbf{Solution.} Both models were reorganized into the same notebook and forced to share the same dataset configuration, the same validation set, and the same custom image folder.
-
-\subsection{Difficulty 2: Transformer Training on Small Datasets}
-One important issue is that transformer-style models often require careful design to remain effective on small datasets. A naive transformer implementation may perform poorly or train very slowly.
-
-\textbf{Solution.} The final implementation uses a DHVT-inspired model with overlapped patch embedding, token-based attention, and a DAFF module. This is closer to the goal of making transformer-style architectures more compatible with small datasets.
-
-\subsection{Difficulty 3: Keeping the Work in Homework Style}
-Another difficulty was to avoid writing the project in a purely engineering style. The notebook had to remain understandable as a class assignment, with a clear step-by-step structure and readable explanations.
-
-\textbf{Solution.} The final implementation was kept in notebook format, with explicit sections, simple code flow, and full textual explanations in English.
-
-\subsection{Difficulty 4: Reusability for Other Datasets}
-If the notebook had been written only for CIFAR-10, it would have been less useful for later experiments.
-
-\textbf{Solution.} A dataset selection section was added, allowing the user to switch between \texttt{CIFAR-10}, \texttt{CIFAR-100}, and a folder-based custom dataset.
-
-\subsection{Difficulty 5: Long Training Time and Missing Intermediate Output}
-When training DHVT from scratch, especially on Colab, it is possible to wait a long time before seeing any visible progress. This creates confusion because the model may appear frozen even when it is still running.
-
-\textbf{Solution.} The DHVT training code was written with regular progress printing inside the batch loop, so the user can observe the evolution of the training process without waiting for a full epoch before seeing output.
-
-
-\section{Results}
-The notebook produced a full set of quantitative and qualitative comparisons between AlexNet and DHVT under the same CIFAR-10 setting. The most important observation is that the DHVT implementation is not only more accurate than AlexNet, but also more parameter-efficient and more consistent across classes. Table~\ref{tab:main_results} summarizes the main metrics extracted from the final notebook outputs.
-
+\subsection{Comparaison principale entre CIFAR-10 et CIFAR-100}
 \begin{table}[H]
 \centering
 \begin{tabular}{>{\raggedright\arraybackslash}p{5.5cm}cc}
 \toprule
-Metric & AlexNet & DHVT \\
+Mesure & CIFAR-10 & CIFAR-100 \\
 \midrule
-Best validation accuracy & 0.6848 & 0.8062 \\
-Number of parameters & 58,322,314 & 6,504,202 \\
-Macro precision & 0.6811 & 0.8057 \\
-Macro recall & 0.6848 & 0.8062 \\
-Macro F1-score & 0.6814 & 0.8056 \\
-Expected calibration error (ECE) & 0.0211 & 0.0198 \\
+Accuracy AlexNet / DHVT & 0.6848 / 0.7762 & 0.2856 / 0.5012 \\
+\'Ecart d'accuracy & +0.0914 & +0.2156 \\
+F1 macro AlexNet / DHVT & 0.6814 / 0.7759 & 0.2713 / 0.4958 \\
+Param\`etres AlexNet / DHVT & 58.32M / 6.80M & 58.69M / 6.81M \\
+Temps AlexNet / DHVT & 24.73 min / 15.56 min & 15.60 min / 14.24 min \\
 \bottomrule
 \end{tabular}
-\caption{Main numerical outputs extracted from the notebook.}
-\label{tab:main_results}
+\caption{Comparaison horizontale entre AlexNet et DHVT sur les deux jeux de donn\'ees principaux.}
+\label{tab:cross_dataset_results}
 \end{table}
 
-Table~\ref{tab:main_results} already supports three important conclusions. First, DHVT achieved a clearly higher best validation accuracy than AlexNet, improving from 68.48\% to 80.62\%. Second, this improvement was achieved with far fewer parameters, which makes the result more interesting than a simple capacity comparison. Third, the macro precision, recall, and F1-score all show the same ranking, so the advantage of DHVT is not limited to a single metric.
+Le tableau~\ref{tab:cross_dataset_results} r\'esume le r\'esultat principal du projet. Sur CIFAR-10, DHVT d\'epasse d\'ej\`a AlexNet. Sur CIFAR-100, l'\'ecart devient beaucoup plus grand : le gain d'accuracy passe d'environ 9 points \`a plus de 21 points. Dans nos exp\'eriences, l'\'ecart devient donc surtout plus net lorsque la classification est plus fine.
 
-\subsection{Training and Validation Curves}
+Cette tendance est coh\'erente avec l'id\'ee mise en avant dans l'article de DHVT~\cite{dhvt} : une architecture de type transformer peut rester pertinente sur des jeux de donn\'ees modestes lorsqu'elle int\`egre davantage d'information locale. Le fait que DHVT reste beaucoup plus compact qu'AlexNet apporte aussi un \'el\'ement utile \`a la comparaison.
+
+\subsection{Comparaison globale entre les deux mod\`eles}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.88\linewidth]{figures/01_validation_curves.png}
-    \caption{01. Validation loss and validation accuracy curves of AlexNet and DHVT.}
+    \includegraphics[width=0.88\linewidth]{figures/validation_curves.png}
+    \caption{Comparaison DHVT-AlexNet sur CIFAR-10.}
     \label{fig:validation_curves}
 \end{figure}
 
-Figure~\ref{fig:validation_curves} compares the validation loss and validation accuracy of the two models across training epochs. The curves indicate that DHVT learns more effectively than AlexNet on the current dataset. Its validation accuracy rises to a clearly higher level, and its validation loss decreases more strongly. AlexNet remains a meaningful baseline, but the gap in the final validation accuracy suggests that the DHVT design is better suited to the current task.
+La figure~\ref{fig:validation_curves} compare les courbes de validation sur CIFAR-10. D\`es la deuxi\`eme \'epoque, DHVT atteint environ 0.63 d'accuracy de validation, contre environ 0.53 pour AlexNet, et cet \'ecart reste visible jusqu'\`a la fin. Du c\^ot\'e de la perte, la diminution est plus rapide et plus r\'eguli\`ere pour DHVT : \`a l'\'epoque 8, sa loss est proche de 0.64 alors que celle d'AlexNet reste autour de 0.90. La figure montre donc non seulement un meilleur score final, mais aussi une convergence plus rapide et une trajectoire plus stable.
 
-This figure is especially important because it provides a dynamic view of learning rather than only a final number. It shows whether the model converges quickly, whether the training remains stable, and whether there is any sign of plateauing. In this experiment, DHVT not only reaches a better end result, but also shows a stronger overall trajectory during training.
-
-\subsection{Confusion Matrices}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.82\linewidth]{figures/02_confusion_matrices.png}
-    \caption{02. Confusion matrices of AlexNet and DHVT on the evaluation set.}
-    \label{fig:confusion}
+    \includegraphics[width=0.88\linewidth]{figures/validation_curves_cifar100.png}
+    \caption{Comparaison DHVT-AlexNet sur CIFAR-100.}
+    \label{fig:validation_curves_cifar100}
 \end{figure}
 
-Figure~\ref{fig:confusion} is one of the most informative class-level analyses in the report. The diagonal entries summarize the per-class success rates, while the off-diagonal entries reveal which categories are visually close to each other from the perspective of each model. In the current experiment, both models still confuse semantically similar classes such as cat and dog, but the DHVT matrix is noticeably more concentrated on the diagonal, which is consistent with its better overall accuracy.
+La figure~\ref{fig:validation_curves_cifar100} pr\'esente la m\^eme comparaison sur CIFAR-100. Ici, l'\'ecart se creuse davantage : l'accuracy de DHVT passe d'environ 0.21 \`a 0.50, alors qu'AlexNet progresse seulement d'environ 0.08 \`a 0.29. La diff\'erence est tout aussi nette sur la perte de validation, qui descend sous 1.9 pour DHVT mais reste proche de 2.9 pour AlexNet en fin d'entra\^\i nement. La figure montre donc que, sur ce jeu de donn\'ees, DHVT reste devant pendant toute la phase d'apprentissage.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.88\linewidth]{figures/07_per_class_accuracy.png}
-    \caption{07. Per-class accuracy comparison between AlexNet and DHVT.}
+    \includegraphics[width=0.78\linewidth]{figures/confidence_distribution_top.png}
+    \caption{Distribution des scores de confiance sur CIFAR-10.}
+    \label{fig:confidence_distribution}
+\end{figure}
+
+La figure~\ref{fig:confidence_distribution} montre la distribution des scores de confiance sur CIFAR-10. Chez AlexNet, les pr\'edictions incorrectes occupent encore fortement la zone interm\'ediaire autour de 0.3--0.6, ce qui cr\'ee un recouvrement important avec les pr\'edictions correctes. Chez DHVT, au contraire, les pr\'edictions correctes se concentrent beaucoup plus pr\`es de 0.9--1.0, tandis que les erreurs restent majoritairement dans des niveaux de confiance plus bas. La distribution indique donc une s\'eparation plus nette entre succ\`es et erreurs, et pas seulement une hausse uniforme des scores.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.78\linewidth]{figures/confidence_distribution_cifar100_top.png}
+    \caption{Distribution des scores de confiance sur CIFAR-100.}
+    \label{fig:confidence_distribution_cifar100}
+\end{figure}
+
+La figure~\ref{fig:confidence_distribution_cifar100} reprend cette lecture sur CIFAR-100. Pour AlexNet, une grande partie des pr\'edictions, y compris correctes, reste concentr\'ee \`a tr\`es faible confiance, souvent sous 0.3, ce qui traduit un mod\`ele h\'esitant. DHVT pr\'esente encore un recouvrement entre correct et incorrect, mais ses bonnes pr\'edictions s'\'etendent davantage vers les zones 0.5--1.0 et ses erreurs se concentrent surtout dans les niveaux plus bas. M\^eme si la t\^ache est plus difficile, la structure de la distribution reste donc plus favorable pour DHVT.
+
+\subsection{Diff\'erences par classe}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\linewidth]{figures/per_class_accuracy_gap.png}
+    \caption{Accuracy par classe sur CIFAR-10.}
     \label{fig:per_class_accuracy}
 \end{figure}
 
-Figure~\ref{fig:per_class_accuracy} shows that the gain of DHVT is not concentrated in only one or two categories. The transformer-style model improves performance on almost every class, with especially visible gains on visually challenging categories such as bird, deer, and dog. This figure is important because it demonstrates that the higher overall accuracy is the result of broad class-level improvement rather than a narrow specialization.
+La figure~\ref{fig:per_class_accuracy} montre que le gain de DHVT n'est pas concentr\'e sur une seule classe. Les plus grands \'ecarts apparaissent pour \textit{bird}, \textit{dog} et \textit{deer}, avec des gains proches ou sup\'erieurs \`a 0.15. \`A l'inverse, sur \textit{truck}, \textit{frog} ou \textit{automobile}, l'avantage reste positif mais beaucoup plus modeste. La figure montre donc que l'am\'elioration observ\'ee n'est pas limit\'ee \`a un petit nombre de classes.
 
-Another useful detail is that the classes with the largest gains are also classes in which local texture alone is often insufficient. In those categories, the ability of DHVT to combine local and more global information appears to be a practical advantage over the purely convolutional baseline.
+\subsection{Les images difficiles restent interpr\'etables}
 
-\subsection{Misclassified Examples}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\linewidth]{figures/03_misclassified_examples.png}
-    \caption{03. Examples in which at least one of the two models makes an incorrect prediction.}
+    \includegraphics[width=0.6\linewidth]{figures/misclassified_examples.png}
+    \caption{Exemples d'erreurs de classification.}
     \label{fig:misclassified}
 \end{figure}
 
-Figure~\ref{fig:misclassified} provides a qualitative complement to the numerical metrics. It reveals the kinds of visual situations that remain difficult, such as cluttered backgrounds, unusual object poses, low-resolution details, or strong similarity between classes. It is also useful for identifying cases in which one architecture succeeds while the other fails, which suggests that the two models rely on different visual cues.
+Les exemples de la figure~\ref{fig:misclassified} montrent que les erreurs restantes ne sont pas toutes de m\^eme nature. Dans plusieurs cas, DHVT corrige une confusion plausible d'AlexNet, par exemple \textit{ship}/\textit{automobile}, \textit{cat}/\textit{dog} ou \textit{ship}/\textit{frog}. On voit aussi qu'il ne r\'esout pas tout : sur un bateau vu de tr\`es pr\`es, DHVT pr\'edit \textit{airplane}, et sur une voiture blanche sur fond rouge, il pr\'edit \textit{cat}. La figure montre donc \`a la fois des corrections int\'eressantes par rapport \`a AlexNet et des cas o\`u l'ambigu\"it\'e visuelle reste forte.
 
-\subsection{Examples Misclassified by Both Models}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\linewidth]{figures/04_both_models_wrong_examples.png}
-    \caption{04. Examples misclassified by both AlexNet and DHVT.}
+    \includegraphics[width=0.6\linewidth]{figures/both_models_wrong_examples.png}
+    \caption{Exemples difficiles pour les deux mod\`eles.}
     \label{fig:both_wrong}
 \end{figure}
 
-Figure~\ref{fig:both_wrong} is especially informative because these are the hardest samples in the current evaluation. If both models fail on the same image, the reason is likely not architecture-specific only. These cases may correspond to ambiguous examples, low image quality, strong inter-class similarity, or samples that contain atypical object appearance.
+La figure~\ref{fig:both_wrong} rassemble des cas o\`u les deux mod\`eles se trompent. Plusieurs exemples correspondent \`a des silhouettes tr\`es floues ou \`a des objets vus sous un angle inhabituel : un chien assimil\'e \`a un \textit{deer}, un avion vert class\'e comme \textit{deer}, ou encore un oiseau rapproch\'e dont la texture sombre conduit \`a des pr\'edictions incoh\'erentes. M\^eme lorsque les deux mod\`eles se trompent diff\'eremment, la difficult\'e visuelle de l'image reste manifeste. Cette figure sert donc surtout \`a d\'elimiter les cas o\`u l'ambigu\"it\'e du dataset domine la diff\'erence architecturale.
 
-From a report-writing perspective, this figure is important because it shifts the discussion from ``which model is better'' to ``which inputs remain fundamentally difficult.'' This makes the analysis more balanced and more academically useful.
-
-\subsection{Confidence Distribution}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\linewidth]{figures/05_confidence_distribution.png}
-    \caption{05. Confidence distribution for AlexNet and DHVT, including correct and incorrect predictions.}
-    \label{fig:confidence}
-\end{figure}
-
-Figure~\ref{fig:confidence} is important because it moves beyond accuracy alone and examines how certain each model is about its predictions. DHVT shows a higher mean confidence, but the figure is useful mainly because it separates confidence on correct predictions from confidence on incorrect predictions. This distinction allows the report to discuss reliability rather than only raw performance.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.88\linewidth]{figures/08_precision_recall_f1.png}
-    \caption{08. Precision, recall, and F1-score comparison between AlexNet and DHVT.}
-    \label{fig:precision_recall_f1}
-\end{figure}
-
-Figure~\ref{fig:precision_recall_f1} complements the confusion matrix with class-aware summary metrics. The macro-level results are consistent with the rest of the analysis: DHVT is more precise, detects a larger proportion of the true samples, and maintains a better balance between precision and recall. This is important because it confirms that the advantage of DHVT is not caused by one-sided behavior such as being only conservative or only aggressive in its predictions.
-
-\subsection{Agreement and Disagreement Between Models}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.72\linewidth]{figures/06_agreement_analysis.png}
-    \caption{06. Agreement and disagreement analysis between AlexNet and DHVT.}
-    \label{fig:agreement}
-\end{figure}
-
-Figure~\ref{fig:agreement} summarizes how often the two models succeed or fail on the same samples. The current notebook outputs are listed in Table~\ref{tab:agreement_results}.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{p{7cm}c}
-\toprule
-Case & Ratio \\
-\midrule
-Both models correct & 0.6304 \\
-AlexNet only correct & 0.0544 \\
-DHVT only correct & 0.1758 \\
-Both models wrong & 0.1394 \\
-\bottomrule
-\end{tabular}
-\caption{Agreement and disagreement ratios between AlexNet and DHVT.}
-\label{tab:agreement_results}
-\end{table}
-
-This is one of the clearest pieces of evidence in the report. DHVT correctly classifies many samples that AlexNet misses, while the reverse case is relatively rare. This strongly supports the conclusion that DHVT is the stronger model in the present setup. At the same time, the non-zero ``both wrong'' portion confirms that there are still difficult samples for both architectures.
-
-\subsection{DHVT Attention Visualization}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\linewidth]{figures/09_dhvt_attention_visualization.png}
-    \caption{09. DHVT attention visualization on representative validation samples.}
+    \includegraphics[width=0.68\linewidth]{figures/dhvt_attention_visualization.png}
+    \caption{Cartes d'attention de DHVT sur des exemples de validation.}
     \label{fig:dhvt_attention}
 \end{figure}
 
-Figure~\ref{fig:dhvt_attention} adds an interpretability perspective to the comparison. While attention maps should not be treated as a complete explanation of model behavior, they still provide useful evidence about where the DHVT model focuses when it predicts a class. In several representative samples, the attention is concentrated on the main object rather than being spread uniformly across the background, which is consistent with the stronger class-level results obtained by DHVT.
+La figure~\ref{fig:dhvt_attention} permet de relier certaines pr\'edictions \`a des zones effectivement regard\'ees par le mod\`ele. Sur les exemples correctement class\'es, comme le bateau ou le chat, les cartes les plus intenses se concentrent sur des r\'egions discriminantes de l'objet plut\^ot que sur l'ensemble de l'arri\`ere-plan ; sur le bateau dans l'eau, l'activation se rassemble notamment sur la coque et la zone de contraste la plus marqu\'ee. En revanche, dans les exemples erron\'es, l'attention se fixe plus volontiers sur des points tr\`es localis\'es ou sur des zones qui ne suffisent pas \`a identifier la classe, comme une petite partie de carrosserie ou un d\'etail brillant. La figure ne d\'emontre pas \`a elle seule la cause des erreurs, mais elle donne une lecture qualitative coh\'erente avec les succ\`es et les \'echecs observ\'es.
 
-This figure is also pedagogically useful. The project is not only about determining which model wins on a benchmark, but also about showing how a transformer-style architecture differs from a classical CNN in the way it processes visual information. For that purpose, the attention visualization is one of the most informative additions to the report.
-
-\section{Discussion}
-Taken together, the visual and numerical evidence suggests that DHVT is the stronger model in this experiment. The advantage is visible at several levels. At the training level, the validation curves show better convergence and a higher final accuracy. At the global evaluation level, the macro precision, recall, and F1-score all favor DHVT. At the class level, the per-class accuracy plot shows that the improvement is broad rather than concentrated in a small number of categories.
-
-This multi-level consistency is important. If the comparison relied only on one final accuracy value, the result would be less convincing. Here, however, the same conclusion appears in the learning curves, in the confusion matrices, in the per-class scores, and in the agreement analysis. In other words, DHVT does not win by chance or by exploiting one narrow metric; it performs better under several complementary views of evaluation.
-
-The confidence analysis further refines the interpretation. DHVT is not only more accurate, but also slightly better calibrated according to the expected calibration error. This means that the transformer-style model is not simply more confident; its confidence is, on average, more aligned with its actual correctness. At the same time, the qualitative error examples and the shared failure cases show that both models still struggle on ambiguous or visually challenging samples. This prevents the discussion from becoming overly simplistic and keeps the analysis grounded in the actual limitations of the dataset.
-
-However, the stronger result of DHVT in this experiment does not remove the weaknesses of transformer-style models. In general, transformer-based vision models are more demanding in design and tuning than CNNs. They often depend more strongly on data quantity, augmentation strategy, optimization details, and regularization choices. They are also usually less straightforward to explain from a classical feature-extraction perspective, and their attention visualizations, while useful, do not provide a complete causal explanation of the prediction process. Even when the parameter count is smaller than AlexNet in the present implementation, the transformer branch still remains architecturally more complex and less lightweight from an educational and implementation point of view.
-
-AlexNet also has clear limitations. Its convolutional inductive bias is useful, but its representation is more local, and this can reduce its ability to model long-range visual relationships. In addition, the classical AlexNet design contains a very large classifier, which makes the model parameter-heavy in this project despite its older architecture. The results therefore suggest a balanced interpretation: AlexNet remains a strong, readable baseline, while DHVT offers better accuracy and class-level discrimination at the price of greater conceptual and implementation complexity.
-
-Finally, the attention visualization provides a meaningful architectural explanation for the observed performance gap. The results suggest that DHVT benefits from its combination of local inductive bias and token-based global interaction. In the present experiment, this hybrid design appears to be a practical reason why the model achieves better discrimination on difficult categories while remaining much smaller than the AlexNet baseline. Even so, this advantage should be understood as a result of the current setup rather than as proof that transformer-style models are always preferable in every image-classification problem.
-
-\section{Conclusion}
-This project compared AlexNet and DHVT on the same dataset under a shared and controlled experimental design. The notebook integrates training, checkpoint saving, checkpoint loading, custom-image inference, and several complementary visualization tools. This unified workflow makes the experiment appropriate both as a course project and as a reusable starting point for later comparisons on other datasets.
-
-The final conclusion is clear: DHVT is the stronger model in the present setup. It achieves better validation accuracy, better macro precision, recall, and F1-score, and slightly better calibration, while using far fewer parameters than AlexNet. This makes the result particularly meaningful, because the improvement is not explained by a larger model but by a more effective architecture.
-
-At the same time, the comparison should be interpreted with nuance. The present DHVT implementation performs better, but transformer-style models remain more complex, more sensitive to training design, and often less convenient to deploy or explain than classical CNNs. Conversely, AlexNet is easier to understand and still offers a strong baseline, but it is less competitive here and becomes surprisingly parameter-heavy because of its classifier structure.
-
-The broader lesson of the project is therefore methodological as well as architectural. A fair model comparison should not stop at one aggregate number or at a list of advantages. Training curves, class-level metrics, confidence behavior, qualitative failure cases, and attention visualization all reveal different aspects of model behavior, including both strengths and weaknesses. By combining these views, the report shows not only that DHVT performs better in this experiment, but also what trade-offs come with that improvement.
-
-\appendix
-
-\section{Appendix: Exported Figures Used in This Report}
-The figures inserted into this report were extracted directly from the notebook outputs and copied into the \texttt{latex/figures} directory with continuous numbering, as summarized in Table~\ref{tab:figure_files}.
+\subsection{R\'esultats sur les variantes de CIFAR-100}
+Pour aller plus loin, un troisi\`eme notebook a construit une version plus petite et plus contr\^ol\'ee de CIFAR-100, avec quatre variantes : \texttt{clean}, \texttt{texture}, \texttt{damaged\_occluded} et \texttt{long\_range}. Le benchmark repose sur 12 classes, avec 80 images d'entra\^\i nement et 30 images de validation par classe. L'id\'ee \'etait de voir si l'\'ecart entre AlexNet et DHVT restait visible quand on modifie la nature de l'information visuelle.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{p{2cm}p{10cm}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.4cm}ccc}
 \toprule
-No. & File name \\
+Variante & AlexNet acc. & DHVT acc. & \'Ecart DHVT -- AlexNet \\
 \midrule
-01 & \texttt{01\_validation\_curves.png} \\
-02 & \texttt{02\_confusion\_matrices.png} \\
-03 & \texttt{03\_misclassified\_examples.png} \\
-04 & \texttt{04\_both\_models\_wrong\_examples.png} \\
-05 & \texttt{05\_confidence\_distribution.png} \\
-06 & \texttt{06\_agreement\_analysis.png} \\
-07 & \texttt{07\_per\_class\_accuracy.png} \\
-08 & \texttt{08\_precision\_recall\_f1.png} \\
-09 & \texttt{09\_dhvt\_attention\_visualization.png} \\
+clean & 0.2694 & 0.5167 & +0.2472 \\
+texture & 0.2583 & 0.4278 & +0.1694 \\
+damaged\_occluded & 0.2944 & 0.4222 & +0.1278 \\
+long\_range & 0.3333 & 0.4472 & +0.1139 \\
 \bottomrule
 \end{tabular}
-\caption{Exported figure files used in the report.}
-\label{tab:figure_files}
+\caption{R\'esultats du notebook modifi\'e sur les variantes de CIFAR-100.}
+\label{tab:variant_results}
 \end{table}
 
-\section{References}
-\begin{enumerate}[leftmargin=1.2cm]
-    \item Krizhevsky, A., Sutskever, I., and Hinton, G. E. \textit{ImageNet Classification with Deep Convolutional Neural Networks}. 2012.
-    \item Dosovitskiy, A. et al. \textit{An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale}. 2021.
-    \item Lu, Y. et al. \textit{Bridging the Gap Between Vision Transformers and Convolutional Neural Networks on Small Datasets}. 2022.
-    \item PyTorch Documentation. \url{https://pytorch.org/}
-    \item Torchvision Documentation. \url{https://pytorch.org/vision/stable/}
-\end{enumerate}
+Le tableau~\ref{tab:variant_results} montre que DHVT reste au-dessus dans tous les cas. Le gain le plus fort appara\^\i t sur la version \texttt{clean} (+0.2472), puis sur \texttt{texture} (+0.1694), \texttt{damaged\_occluded} (+0.1278) et \texttt{long\_range} (+0.1139). Autrement dit, m\^eme quand on r\'eduit le jeu de donn\'ees et qu'on introduit des difficult\'es plus cibl\'ees, la hi\'erarchie observ\'ee entre les deux mod\`eles ne s'inverse pas.
+
+L'ampleur de l'\'ecart n'est toutefois pas exactement la m\^eme selon la perturbation. Sur \texttt{texture}, l'avantage de DHVT reste important. Sur \texttt{long\_range}, l'\'ecart reste positif mais un peu plus r\'eduit. Enfin, sur \texttt{damaged\_occluded}, le gain est encore pr\'esent mais plus modeste. Ces diff\'erences montrent que les transformations n'affectent pas les deux mod\`eles de la m\^eme mani\`ere, m\^eme si la hi\'erarchie g\'en\'erale reste la m\^eme.
+
+\section{Discussion}
+Le point principal est que la comparaison entre les deux mod\`eles reste coh\'erente dans trois cadres diff\'erents : un jeu de donn\'ees simple (CIFAR-10), un jeu de donn\'ees plus difficile (CIFAR-100), puis une version modifi\'ee et plus cibl\'ee de CIFAR-100.
+
+Ces r\'esultats restent coh\'erents avec la motivation du papier DHVT~\cite{dhvt}. Les modules \textit{SOPE}, \textit{HI-MHSA} et \textit{DAFF} donnent une lecture possible des \'ecarts observ\'es, en combinant des m\'ecanismes globaux issus des transformers et des traitements plus locaux inspir\'es des CNN.
+
+Il faut toutefois rappeler qu'une architecture de type transformer garde aussi des limites. En g\'en\'eral, ces mod\`eles sont plus sensibles au protocole d'entra\^\i nement, \`a la quantit\'e de donn\'ees et aux choix d'optimisation qu'un CNN tr\`es classique. Ils demandent aussi des co\^uts de mise au point plus importants, aussi bien pour le r\'eglage des hyperparam\`etres que pour l'analyse de leur comportement interne. Enfin, leur interpr\'etation reste souvent moins imm\'ediate que celle d'un baseline convolutionnel simple, notamment lorsque l'on cherche \`a relier une d\'ecision finale \`a des indices visuels pr\'ecis.
+
+Il faut bien s\^ur garder les limites du protocole en t\^ete. Huit \'epoques restent courtes, et les variantes de CIFAR-100 sont des constructions exp\'erimentales destin\'ees \`a faire ressortir certains comportements, pas un benchmark universel. Dans ce cadre, les r\'esultats obtenus restent favorables \`a DHVT sur l'ensemble des comparaisons effectu\'ees.
+
+\section{Conclusion}
+Sur CIFAR-10, sur CIFAR-100, puis sur les variantes construites \`a partir de CIFAR-100, DHVT obtient dans nos exp\'eriences des r\'esultats sup\'erieurs \`a ceux d'AlexNet. L'\'ecart est d\'ej\`a visible sur le jeu de donn\'ees simple, puis il devient plus marqu\'e quand la t\^ache demande une discrimination plus fine ou quand les conditions visuelles sont modifi\'ees.
+
+Cette r\'egularit\'e montre surtout que, dans notre cadre exp\'erimental, DHVT constitue une alternative cr\'edible \`a AlexNet pour les petits jeux de donn\'ees~\cite{dhvt}. Le mod\`ele se distingue notamment par la combinaison de m\'ecanismes globaux issus des transformers et de traitements plus locaux inspir\'es des CNN.
+
+En conclusion, dans les trois notebooks \'etudi\'es, DHVT obtient des r\'esultats sup\'erieurs \`a ceux d'AlexNet. La conclusion principale du projet porte donc sur cette comparaison directe entre un baseline convolutionnel classique et une architecture hybride inspir\'ee des transformers, dans les limites des exp\'eriences r\'ealis\'ees.
+
+\section{R\'ef\'erences}
+\begin{thebibliography}{9}
+\bibitem{alexnet}
+Krizhevsky, A., Sutskever, I., and Hinton, G. E.
+\textit{ImageNet Classification with Deep Convolutional Neural Networks}. 2012.
+
+\bibitem{vit}
+Dosovitskiy, A. et al.
+\textit{An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale}. 2021.
+
+\bibitem{dhvt}
+Lu, Y. et al.
+\textit{Bridging the Gap Between Vision Transformers and Convolutional Neural Networks on Small Datasets}. 2022.
+
+\bibitem{pytorch}
+PyTorch Documentation.
+\url{https://pytorch.org/}
+
+\bibitem{torchvision}
+Torchvision Documentation.
+\url{https://pytorch.org/vision/stable/}
+\end{thebibliography}
 
 \end{document}

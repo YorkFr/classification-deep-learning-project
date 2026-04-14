@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.29)  30 MAR 2026 17:09
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.29)  7 APR 2026 01:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -853,6 +853,11 @@ Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
 \backup@length=\skip68
 \ar@cellbox=\box80
 )
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\\' on input line 18.
+
+
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-xet
 ex.def
 File: l3backend-xetex.def 2025-10-09 L3 backend support: XeTeX
@@ -999,179 +1004,133 @@ Dictionary: translator-theorem-dictionary, Language: English
 ] [3
 
 ]
+File: architecture/cnn.png Graphic file (type bmp)
+<architecture/cnn.png>
 LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 
-60.
+62.
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmss.fd
 File: ot1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 6
-0.
+2.
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-60.
+62.
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-60.
+62.
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 60.
+(Font)              <8> on input line 62.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 60.
+(Font)              <6> on input line 62.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 60.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 60.
+(Font)              <5> on input line 62.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 62.
 
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 60.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 62.
 
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 60.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 60.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 62.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 60.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 62.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 62.
 
 [4
 
 ]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 8
-3.
- (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-[5
+File: architecture/DHVT.png Graphic file (type bmp)
+<architecture/DHVT.png>
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10.95> on input line 75.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 75.
+ [5
 
 ] [6
 
-]
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 12
-3.
- (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd
-File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-[7
-
-] [8
-
-] [9
-
-] [10
+] [7
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 203--203
-[]|\T1/lmss/m/n/10.95 Small-dataset trans-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 203--203
-[]|\T1/lmss/m/n/10.95 Use a DHVT-style ar-chi-tec-ture
- []
-
-
-Underfull \hbox (badness 2818) in paragraph at lines 203--203
-[]|\T1/lmss/m/n/10.95 Homework-style pre-sen-
- []
-
-[11
-
-] [12
+File: figures/validation_curves_cifar100.png Graphic file (type bmp)
+<figures/validation_curves_cifar100.png>
+ [8
 
 ]
-File: ../report/figures/01_validation_curves.png Graphic file (type bmp)
-<../report/figures/01_validation_curves.png>
- [13
+File: figures/confidence_distribution_cifar100_top.png Graphic file (type bmp)
+<figures/confidence_distribution_cifar100_top.png>
+ [9
 
 ]
-File: ../report/figures/02_confusion_matrices.png Graphic file (type bmp)
-<../report/figures/02_confusion_matrices.png>
- [14
+File: figures/per_class_accuracy_gap.png Graphic file (type bmp)
+<figures/per_class_accuracy_gap.png>
+ [10
 
 ]
-File: ../report/figures/07_per_class_accuracy.png Graphic file (type bmp)
-<../report/figures/07_per_class_accuracy.png>
+File: figures/misclassified_examples.png Graphic file (type bmp)
+<figures/misclassified_examples.png>
+ [11
+
+]
+File: figures/dhvt_attention_visualization.png Graphic file (type bmp)
+<figures/dhvt_attention_visualization.png>
+ [12
+
+]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
+15.
+
+(C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+) [13
+
+]
+[14
+
+]
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 235.
  [15
 
-]
-File: ../report/figures/03_misclassified_examples.png Graphic file (type bmp)
-<../report/figures/03_misclassified_examples.png>
-
-Overfull \vbox (1.25235pt too high) detected at line 260
- []
-
-[16
+] [16
 
 ]
-File: ../report/figures/04_both_models_wrong_examples.png Graphic file (type bm
-p)
-<../report/figures/04_both_models_wrong_examples.png>
 
-Overfull \vbox (37.27196pt too high) detected at line 271
- []
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\translate ' on input line 246.
 
+File: architecture/DHVT.png Graphic file (type bmp)
+<architecture/DHVT.png>
 [17
 
 ]
-File: ../report/figures/05_confidence_distribution.png Graphic file (type bmp)
-<../report/figures/05_confidence_distribution.png>
-
-Overfull \vbox (26.60913pt too high) detected at line 282
- []
-
-[18
+File: architecture/HI-MHSA.png Graphic file (type bmp)
+<architecture/HI-MHSA.png>
+ [18
 
 ]
-File: ../report/figures/06_agreement_analysis.png Graphic file (type bmp)
-<../report/figures/06_agreement_analysis.png>
+File: architecture/DAFF.png Graphic file (type bmp)
+<architecture/DAFF.png>
  [19
-
-]
-File: ../report/figures/08_precision_recall_f1.png Graphic file (type bmp)
-<../report/figures/08_precision_recall_f1.png>
- [20
-
-]
-File: ../report/figures/09_dhvt_attention_visualization.png Graphic file (type 
-bmp)
-<../report/figures/09_dhvt_attention_visualization.png>
-
-Overfull \vbox (157.02635pt too high) detected at line 327
- []
-
-[21
-
-] [22
-
-] [23
-
-]
-File: beamericonarticle.pdf Graphic file (type pdf)
-<use beamericonarticle.pdf>
-File: beamericonarticle.pdf Graphic file (type pdf)
-<use beamericonarticle.pdf>
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 366.
-File: beamericonarticle.pdf Graphic file (type pdf)
-<use beamericonarticle.pdf>
-File: beamericonarticle.pdf Graphic file (type pdf)
-<use beamericonarticle.pdf>
- [24
 
 ]
 \tf@nav=\write6
@@ -1189,15 +1148,15 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-11-06>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 270A15C42807760335DAA3177905C9CA;670.
+(rerunfilecheck)             Checksum: C038BD063ED129B52B66C9BB35B2D35B;532.
  ) 
 Here is how much of TeX's memory you used:
- 22090 strings out of 402987
- 422763 string characters out of 5448523
- 797265 words of memory out of 5000000
- 50335 multiletter control sequences out of 15000+600000
- 676850 words of font info for 73 fonts, out of 8000000 for 9000
+ 22006 strings out of 402987
+ 419052 string characters out of 5448523
+ 796866 words of memory out of 5000000
+ 50253 multiletter control sequences out of 15000+600000
+ 680002 words of font info for 78 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 128i,15n,123p,419b,614s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,15n,123p,419b,630s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (24 pages).
+Output written on main.pdf (19 pages).

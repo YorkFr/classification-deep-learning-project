@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.29)  31 MAR 2026 22:28
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.29)  1 APR 2026 21:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -395,8 +395,12 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-))
-Package hyperref Info: Option `colorlinks' set `true' on input line 25.
+)) (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/cite\cite.sty
+LaTeX Info: Redefining \cite on input line 302.
+LaTeX Info: Redefining \nocite on input line 332.
+Package: cite 2015/02/27  v 5.5
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 26.
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-xet
 ex.def
@@ -407,26 +411,26 @@ File: l3backend-xetex.def 2025-10-09 L3 backend support: XeTeX
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -462,48 +466,48 @@ LaTeX Font Info:    ... okay on input line 31.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring ON on input line 31.
+Package hyperref Info: Link coloring ON on input line 32.
 (main.out) (main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
 
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 4
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 5
 8.
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 4
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 5
 8.
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-48.
+58.
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-48.
+58.
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 48.
+(Font)              <10.95> on input line 58.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 48.
+(Font)              <8> on input line 58.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 48.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 48.
+(Font)              <6> on input line 58.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 58.
 
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 48.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 58.
 
 
 (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -516,65 +520,108 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \openout4 = `main.toc'.
 
  [1]
-Underfull \hbox (badness 1173) in paragraph at lines 104--105
-[]|\T1/lmr/m/n/10.95 DHVT rep-re-sents a transformer-style model
+Overfull \hbox (7.2045pt too wide) in paragraph at lines 84--85
+\T1/lmr/m/n/10.95 Comparer AlexNet et DHVT est per-ti-nent parce que les deux m
+od-èles ne trait-ent pas l'information
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 96--96
+[]|\T1/lmr/m/n/10.95 Transformer de
+ []
+
+
+Underfull \hbox (badness 5939) in paragraph at lines 97--97
+[]|\T1/lmr/m/n/10.95 Convolutions lo-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 98--98
+[]|\T1/lmr/m/n/10.95 Pas d'attention
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 98--99
+[]|[][]\T1/lmr/m/n/10.95 HI-MHSA[][] ajoute des head
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 98--99
+\T1/lmr/m/n/10.95 to-kens pour struc-turer
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 99--99
+[]|\T1/lmr/m/n/10.95 Blocs con-vo-lu-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--100
+[]|\T1/lmr/m/n/10.95 Modèle global
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--100
+\T1/lmr/m/n/10.95 mais plus ex-
+ []
+
+
+Overfull \hbox (4.75159pt too wide) in paragraph at lines 92--103
+ [][] 
  []
 
 [2]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-23.
+10.
  (C:\Users\yangh\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-Underfull \hbox (badness 10000) in paragraph at lines 125--126
-[]|\T1/lmr/m/n/10.95 Folder-based dataset us-ing the struc-ture
- []
-
 [3] [4] [5] [6]
-Underfull \hbox (badness 10000) in paragraph at lines 291--292
-[]|\T1/lmr/m/n/10.95 Improve ro-bust-ness to mi-nor ori-en-ta-tion
+Overfull \hbox (4.58955pt too wide) in paragraph at lines 264--265
+\T1/lmr/m/n/10.95 com-para-i-son di-recte des deux ar-chi-tec-tures, sans préen
+-traîne-ment, avec un bud-get d'entraînement
  []
 
-[7] [8]
-File: figures/01_validation_curves.png Graphic file (type bmp)
-<figures/01_validation_curves.png>
-File: figures/02_confusion_matrices.png Graphic file (type bmp)
-<figures/02_confusion_matrices.png>
-File: figures/07_per_class_accuracy.png Graphic file (type bmp)
-<figures/07_per_class_accuracy.png>
+
+Overfull \hbox (12.0498pt too wide) in paragraph at lines 268--277
+ [][] 
+ []
+
+[7]
+File: figures/validation_curves.png Graphic file (type bmp)
+<figures/validation_curves.png>
+File: figures/validation_curves_cifar100.png Graphic file (type bmp)
+<figures/validation_curves_cifar100.png>
+ [8]
+File: figures/confidence_distribution_top.png Graphic file (type bmp)
+<figures/confidence_distribution_top.png>
+File: figures/confidence_distribution_cifar100_top.png Graphic file (type bmp)
+<figures/confidence_distribution_cifar100_top.png>
  [9]
-File: figures/03_misclassified_examples.png Graphic file (type bmp)
-<figures/03_misclassified_examples.png>
+File: figures/per_class_accuracy_gap.png Graphic file (type bmp)
+<figures/per_class_accuracy_gap.png>
+File: figures/misclassified_examples.png Graphic file (type bmp)
+<figures/misclassified_examples.png>
  [10]
-File: figures/04_both_models_wrong_examples.png Graphic file (type bmp)
-<figures/04_both_models_wrong_examples.png>
- [11]
-File: figures/05_confidence_distribution.png Graphic file (type bmp)
-<figures/05_confidence_distribution.png>
- [12]
-File: figures/08_precision_recall_f1.png Graphic file (type bmp)
-<figures/08_precision_recall_f1.png>
- [13]
-File: figures/06_agreement_analysis.png Graphic file (type bmp)
-<figures/06_agreement_analysis.png>
- [14]
-File: figures/09_dhvt_attention_visualization.png Graphic file (type bmp)
-<figures/09_dhvt_attention_visualization.png>
- [15] [16] [17] [18] [19] (main.aux)
+File: figures/both_models_wrong_examples.png Graphic file (type bmp)
+<figures/both_models_wrong_examples.png>
+File: figures/dhvt_attention_visualization.png Graphic file (type bmp)
+<figures/dhvt_attention_visualization.png>
+ [11] [12] [13] [14] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-11-06>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 12386F85D98B14E4CF2A60B9EF29BFBF;6526.
+(rerunfilecheck)             Checksum: 55A99A5D385B952AFDAEA32B37238C08;3494.
  ) 
 Here is how much of TeX's memory you used:
- 11265 strings out of 402987
- 169365 string characters out of 5448523
- 599090 words of memory out of 5000000
- 39823 multiletter control sequences out of 15000+600000
- 681249 words of font info for 73 fonts, out of 8000000 for 9000
+ 11346 strings out of 402987
+ 170317 string characters out of 5448523
+ 597946 words of memory out of 5000000
+ 39903 multiletter control sequences out of 15000+600000
+ 675264 words of font info for 71 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 72i,10n,79p,816b,478s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,10n,79p,894b,457s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (20 pages).
+Output written on main.pdf (15 pages).

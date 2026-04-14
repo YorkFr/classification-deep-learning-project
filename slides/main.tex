@@ -1,7 +1,6 @@
 \documentclass[aspectratio=169,11pt]{beamer}
 
 \usetheme{Madrid}
-\usecolortheme{default}
 \setbeamertemplate{navigation symbols}{}
 
 \usepackage[utf8]{inputenc}
@@ -10,14 +9,15 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath}
-\usepackage{hyperref}
 \usepackage{array}
+\usepackage{xcolor}
+\usecolortheme{default}
+\newcommand{\titlecite}[2]{\texorpdfstring{\href{#1}{[#2]}}{[#2]}}
 
-\title[AlexNet vs DHVT]{Comparison of AlexNet and DHVT\\on the Same Image Classification Dataset}
-\subtitle{Course Presentation}
-\author{Your Name}
+\title[DHVT vs CNN]{AlexNet et DHVT pour la classification d'images}
+\author[Haobo \& Zhenyu]{Haobo YANG 22513870 \\ Zhenyu XU 22508276}
 \institute{Universit\'e Paris Cit\'e}
-\date{\today}
+\date{Ann\'ee universitaire 2025--2026}
 
 \begin{document}
 
@@ -25,361 +25,263 @@
     \titlepage
 \end{frame}
 
-\begin{frame}{Outline}
+\begin{frame}{Plan}
     \tableofcontents
 \end{frame}
 
-\section{Introduction}
+\section{Objectif}
 
-\begin{frame}{Project Goal}
+\begin{frame}{Question du projet}
     \begin{itemize}
-        \item The project compares a classical convolutional model and a transformer-style model under the same dataset setting.
-        \item The two models are trained, saved, reloaded, and evaluated in the same notebook workflow.
-        \item The main objective is to analyze not only accuracy, but also training behavior, confidence, and difficult examples.
+        \item On compare un \textbf{CNN classique} et une architecture \textbf{de type transformer} sur des petits jeux de donn\'ees d'images.
+        \item Le baseline est \textbf{AlexNet} ; le mod\`ele principal est \textbf{DHVT}.
+        \item La question centrale est simple : \textbf{comment rendre un ViT plus efficace sur un petit dataset ?}
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Why Compare AlexNet and DHVT?}
-    \begin{table}
-        \centering
-        \begin{tabular}{p{3.2cm}p{6.9cm}}
-            \toprule
-            Model & Role in the study \\
-            \midrule
-            AlexNet & CNN baseline with strong image inductive bias and a clear layer-by-layer structure. \\
-            DHVT & Transformer-style model adapted to small datasets through overlapped patch embedding and DAFF blocks. \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
+\section{Architecture}
 
-    \vspace{0.3cm}
+\begin{frame}{Point de d\'epart : le CNN \titlecite{https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html}{1}}
+    \centering
+    \includegraphics[height=0.4\textheight,keepaspectratio]{architecture/cnn.png}
+
+    \vspace{0.25cm}
+    \textbf{AlexNet}
     \begin{itemize}
-        \item This comparison contrasts local convolutional processing with token-based attention.
-        \item Both models use the same dataset configuration to keep the experiment fair.
-        \item The report and slides should discuss trade-offs, not only advantages.
+        \item Il utilise des \textbf{convolutions}.
+        \item Il apprend d'abord des \textbf{motifs locaux}.
+        \item Limite : il capture moins bien les relations \textbf{globales}.
     \end{itemize}
-\end{frame}
 
-\section{Dataset and Workflow}
-
-\begin{frame}{Dataset Options}
-    \begin{table}
-        \centering
-        \begin{tabular}{p{3.2cm}p{7cm}}
-            \toprule
-            Option & Description \\
-            \midrule
-            \texttt{CIFAR-10} & Standard 10-class benchmark used as the main baseline dataset. \\
-            \texttt{CIFAR-100} & Same image format with more classes and higher difficulty. \\
-            \texttt{custom\_folder} & User dataset with \texttt{train/class\_name} and \texttt{val/class\_name} folders. \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-
-    \vspace{0.2cm}
-    \begin{itemize}
-        \item Both models can be trained on the same selected dataset.
-        \item Custom inference images are stored separately in \texttt{test\_images/}.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Shared Experimental Workflow}
-    \begin{table}
-        \centering
-        \begin{tabular}{c p{8.2cm}}
-            \toprule
-            Step & Procedure \\
-            \midrule
-            1 & Choose local runtime or Colab runtime. \\
-            2 & Select the dataset and preprocessing settings. \\
-            3 & Train AlexNet and DHVT on the same split. \\
-            4 & Save the best checkpoints for both models. \\
-            5 & Reload the saved models for evaluation and inference. \\
-            6 & Compare training curves and qualitative outputs. \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-\end{frame}
-
-\section{Models}
-
-\begin{frame}{AlexNet}
-    \begin{itemize}
-        \item AlexNet uses stacked convolutions, ReLU, pooling, and fully connected layers.
-        \item In the notebook, it serves as the CNN baseline for the comparison.
-        \item The convolution operation is written as:
-    \end{itemize}
+    \vspace{0.1cm}
+    \scriptsize 
 
     \[
     Y_{i,j}=\sum_u\sum_v K_{u,v}X_{i+u,j+v}
     \]
+\end{frame}
 
-    \[
-    \mathrm{ReLU}(x)=\max(0,x)
-    \]
 
+\begin{frame}{Vue d'ensemble de DHVT \titlecite{https://arxiv.org/abs/2010.11929}{2} \titlecite{https://arxiv.org/abs/2203.16353}{3}}
+    \centering
+    \includegraphics[width=0.82\linewidth,height=0.34\textheight,keepaspectratio]{architecture/DHVT.png}
+
+    \vspace{0.15cm}
     \begin{itemize}
-        \item This structure emphasizes local feature extraction and spatial hierarchy.
+        \item \hyperlink{app:sope}{\textbf{SOPE}} $\rightarrow$ ajoute une entr\'ee de type plus \textbf{convolutionnelle}, donc plus locale.
+        \item \hyperlink{app:himhsa}{\textbf{HI-MHSA}} $\rightarrow$ garde la partie \textbf{globale} du transformer.
+        \item \hyperlink{app:daff}{\textbf{DAFF}} $\rightarrow$ remet de la \textbf{convolution} dans le bloc interne, donc une logique plus proche du CNN.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{DHVT}
-    \begin{itemize}
-        \item DHVT is a transformer-style architecture adapted to smaller datasets.
-        \item The model includes SOPE, class token, positional embeddings, attention blocks, and DAFF.
-        \item Its strength is global interaction, but it is also more complex to train and explain than a CNN baseline.
-        \item Patch-token embedding can be summarized as:
-    \end{itemize}
-
-    \[
-    X \in \mathbb{R}^{B \times C \times H \times W}
-    \rightarrow
-    E \in \mathbb{R}^{B \times N \times d}
-    \]
-
-    \[
-    Z_0=[x_{\mathrm{cls}};E], \qquad Z=Z_0+P
-    \]
-
-    \begin{itemize}
-        \item The model is trained from scratch rather than used only for fine-tuning.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Attention and DHVT Block}
-    \[
-    Q=ZW_Q,\qquad K=ZW_K,\qquad V=ZW_V
-    \]
-
-    \[
-    \mathrm{Attention}(Q,K,V)=\mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
-    \]
-
-    \[
-    Z' = Z + \mathrm{MHSA}(\mathrm{LN}(Z))
-    \]
-
-    \[
-    Z'' = Z' + \mathrm{DAFF}(\mathrm{LN}(Z'))
-    \]
-
-    \begin{itemize}
-        \item The DAFF block adds a convolution-aware feed-forward stage.
-        \item This design helps the transformer preserve useful locality for small datasets.
-    \end{itemize}
-\end{frame}
-
-\section{Training and Difficulties}
-
-\begin{frame}{Training Strategy}
-    \begin{itemize}
-        \item Both models are trained under the same dataset configuration.
-        \item Checkpoints are saved and reloaded inside the notebook.
-        \item The objective function is the cross-entropy loss:
-    \end{itemize}
-
-    \[
-    \mathcal{L} = - \sum_{c=1}^{C} y_c \log(\hat{p}_c)
-    \]
-
-    \begin{itemize}
-        \item Validation accuracy is monitored to keep the best weights for each model.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Main Difficulties and Solutions}
+\begin{frame}{R\'esum\'e de la structure}
     \begin{table}
         \centering
-        \begin{tabular}{p{4cm}p{5.8cm}}
+        \begin{tabular}{p{2.2cm}p{3.4cm}p{6.5cm}}
             \toprule
-            Difficulty & Solution \\
+            Module & Ce qui change & Pourquoi c'est utile \\
             \midrule
-            Fair comparison & Use one notebook and one shared dataset configuration. \\
-            Small-dataset transformer training & Use a DHVT-style architecture trained from scratch. \\
-            Homework-style presentation & Keep the workflow step-by-step in the notebook. \\
-            Reusability & Support multiple datasets and custom folders. \\
-            Long training runs & Print intermediate progress during training. \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-\end{frame}
-
-\section{Results}
-
-\begin{frame}{Main Numerical Results}
-    \begin{table}
-        \centering
-        \begin{tabular}{p{4.5cm}cc}
-            \toprule
-            Metric & AlexNet & DHVT \\
-            \midrule
-            Best validation accuracy & 0.6848 & 0.8062 \\
-            Number of parameters & 58,322,314 & 6,504,202 \\
-            Macro precision & 0.6811 & 0.8057 \\
-            Macro recall & 0.6848 & 0.8062 \\
-            Macro F1-score & 0.6814 & 0.8056 \\
+            \textcolor{blue!70!black}{\hyperlink{app:sope}{SOPE}} & Nouvelle entr\'ee & Garde mieux l'information locale \\
+            \textcolor{blue!70!black}{\hyperlink{app:himhsa}{HI-MHSA}} & Nouvelle attention & Organise mieux l'information globale \\
+            \textcolor{blue!70!black}{\hyperlink{app:daff}{DAFF}} & Nouveau bloc interne & Rajoute du local dans le transformer \\
             \bottomrule
         \end{tabular}
     \end{table}
 
-    \vspace{0.2cm}
+    \vspace{0.25cm}
     \begin{itemize}
-        \item DHVT is both more accurate and more parameter-efficient.
-        \item The advantage is confirmed by several metrics, not by accuracy alone.
-        \item But the transformer branch still comes with higher architectural and optimization complexity.
+        \item En r\'esum\'e, \textbf{DHVT garde le global du transformer}.
+        \item Mais il \textbf{r\'ecup\`ere aussi le local}, ce qui est utile sur les petites images.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Validation Curves}
-    \centering
-    \includegraphics[width=0.92\linewidth]{../report/figures/01_validation_curves.png}
-\end{frame}
+\section{R\'esultats}
 
-\begin{frame}{Confusion Matrices}
-    \centering
-    \includegraphics[width=0.78\linewidth]{../report/figures/02_confusion_matrices.png}
+\begin{frame}{R\'esultat principal}
+    \begin{table}
+        \centering
+        \begin{tabular}{>{\raggedright\arraybackslash}p{4.7cm}cc}
+            \toprule
+            Mesure & CIFAR-10 & CIFAR-100 \\
+            \midrule
+            Accuracy AlexNet / DHVT & 0.6848 / 0.7762 & 0.2856 / 0.5012 \\
+            \'Ecart d'accuracy & +0.0914 & +0.2156 \\
+            F1 macro AlexNet / DHVT & 0.6814 / 0.7759 & 0.2713 / 0.4958 \\
+            Param\`etres AlexNet / DHVT & 58.32M / 6.80M & 58.69M / 6.81M \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
 
-    \vspace{0.2cm}
+    \vspace{0.25cm}
     \begin{itemize}
-        \item DHVT has a stronger diagonal, which means better class-level consistency.
-        \item Both models still confuse visually similar classes such as cat and dog.
+        \item DHVT est \textbf{meilleur sur les deux jeux de donn\'ees}.
+        \item L'\'ecart devient \textbf{beaucoup plus grand sur CIFAR-100}.
+        \item Le mod\`ele est aussi \textbf{bien plus compact} qu'AlexNet.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Per-Class Accuracy}
+\begin{frame}{Les figures confirment la conclusion}
     \centering
-    \includegraphics[width=0.6\linewidth]{../report/figures/07_per_class_accuracy.png}
+    \includegraphics[width=0.88\linewidth,height=0.42\textheight,keepaspectratio]{figures/validation_curves_cifar100.png}
 
-    \vspace{0.2cm}
+    \vspace{0.25cm}
     \begin{itemize}
-        \item The gain of DHVT is broad across classes rather than concentrated in one category.
-        \item The biggest improvements appear on visually difficult classes such as bird, deer, and dog.
+        \item C'est la figure la plus importante car \textbf{CIFAR-100} est le cas le plus difficile.
+        \item DHVT apprend \textbf{plus vite}.
+        \item Il reste \textbf{au-dessus d'AlexNet} pendant tout l'entra\^\i nement.
+        \item Donc son avantage n'appara\^\i t pas seulement \`a la fin.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Misclassified Examples}
+\begin{frame}{La confiance des pr\'edictions est plus coh\'erente}
     \centering
-    \includegraphics[width=0.7\linewidth]{../report/figures/03_misclassified_examples.png}
-\end{frame}
+    \includegraphics[width=0.88\linewidth,height=0.42\textheight,keepaspectratio]{figures/confidence_distribution_cifar100_top.png}
 
-\begin{frame}{Both Models Wrong}
-    \centering
-    \includegraphics[width=0.7\linewidth]{../report/figures/04_both_models_wrong_examples.png}
-
-    \vspace{0.2cm}
+    \vspace{0.25cm}
     \begin{itemize}
-        \item These are the hardest samples in the current evaluation.
-        \item They help identify ambiguous or visually difficult inputs.
+        \item DHVT s\'epare mieux les \textbf{bonnes} et les \textbf{mauvaises} pr\'edictions.
+        \item Donc ses scores de confiance sont plus \textbf{coh\'erents}.
+        \item Ce n'est pas seulement un meilleur score final.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Confidence Distribution}
+\begin{frame}{Le gain n'est pas limit\'e \`a quelques classes}
     \centering
-    \includegraphics[width=0.7\linewidth]{../report/figures/05_confidence_distribution.png}
+    \includegraphics[width=0.88\linewidth,height=0.42\textheight,keepaspectratio]{figures/per_class_accuracy_gap.png}
 
-    \vspace{0.2cm}
+    \vspace{0.25cm}
     \begin{itemize}
-        \item DHVT is more confident overall, but the figure also shows how confidence behaves on mistakes.
-        \item This helps evaluate reliability rather than only top-1 accuracy.
+        \item L'\'ecart entre DHVT et AlexNet est \textbf{positif pour toutes les classes}.
+        \item Le gain n'est donc pas limit\'e \`a quelques classes faciles.
+        \item L'avantage de DHVT est \textbf{global}.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Agreement Analysis}
-    \begin{columns}[T]
-        \begin{column}{0.54\linewidth}
-            \includegraphics[width=\linewidth]{../report/figures/06_agreement_analysis.png}
+\begin{frame}{Exemples d'erreurs de classification}
+    \begin{columns}[c, onlytextwidth]
+        \begin{column}{0.60\linewidth}
+            \includegraphics[width=\linewidth]{figures/misclassified_examples.png}
         \end{column}
-        \begin{column}{0.42\linewidth}
-            \begin{table}
-                \centering
-                \begin{tabular}{p{2.6cm}c}
-                    \toprule
-                    Case & Ratio \\
-                    \midrule
-                    Both correct & 0.6304 \\
-                    AlexNet only & 0.0544 \\
-                    DHVT only & 0.1758 \\
-                    Both wrong & 0.1394 \\
-                    \bottomrule
-                \end{tabular}
-            \end{table}
+        \begin{column}{0.4\linewidth}
+        	\vfill
+            \begin{itemize}
+                \item On voit ici des \textbf{cas difficiles}.
+                \item Dans plusieurs exemples, \textbf{DHVT corrige} une erreur d'AlexNet.
+                \item Les erreurs restantes viennent souvent d'images \textbf{petites} ou \textbf{ambigu\"es}.
+            \end{itemize}
+            \vfill
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Precision, Recall, and F1}
-    \centering
-    \includegraphics[width=0.5\linewidth]{../report/figures/08_precision_recall_f1.png}
-
-    \vspace{0.2cm}
-    \begin{itemize}
-        \item DHVT stays ahead on precision, recall, and F1, so its advantage is not metric-specific.
-        \item This confirms stronger class discrimination and better balance between false positives and false negatives.
-    \end{itemize}
+\begin{frame}{Cartes d'attention de DHVT}
+    \begin{columns}[c,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{figures/dhvt_attention_visualization.png}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item Les cartes montrent \textbf{o\`u DHVT regarde}.
+                \item Sur les bons exemples, l'attention vise souvent l'\textbf{objet principal}.
+                \item Sur les erreurs, elle est plus \textbf{diffuse}.
+            \end{itemize}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{DHVT Attention Visualization}
-    \centering
-    \includegraphics[width=0.4\linewidth]{../report/figures/09_dhvt_attention_visualization.png}
-
-    \vspace{0.2cm}
-    \begin{itemize}
-        \item The attention maps provide an interpretable view of where DHVT focuses.
-        \item In representative samples, the attention is concentrated on the main object rather than the background.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Strengths and Limitations}
+\begin{frame}{R\'esultats sur les variantes de CIFAR-100}
     \begin{table}
         \centering
-        \begin{tabular}{p{2.3cm}p{4.1cm}p{4.1cm}}
+        \begin{tabular}{p{3.2cm}ccc}
             \toprule
-            Model & Strengths & Limitations \\
+            Variante & AlexNet acc. & DHVT acc. & \'Ecart \\
             \midrule
-            AlexNet & Clear baseline, easier to understand, strong local inductive bias & Lower accuracy here, weaker global modeling, very large classifier and high parameter count \\
-            DHVT & Better accuracy, broader class-level gains, better calibration, global token interaction & More complex architecture, more sensitive to training setup, usually harder to tune and explain \\
+            clean & 0.2694 & 0.5167 & +0.2472 \\
+            texture & 0.2583 & 0.4278 & +0.1694 \\
+            damaged\_occluded & 0.2944 & 0.4222 & +0.1278 \\
+            long\_range & 0.3333 & 0.4472 & +0.1139 \\
             \bottomrule
         \end{tabular}
     \end{table}
+
+    \vspace{0.25cm}
+    \begin{itemize}
+        \item DHVT reste \textbf{meilleur sur toutes les variantes}.
+        \item L'avantage est maximal sur \texttt{clean}.
+        \item Mais il reste pr\'esent sur toutes les autres variantes.
+        \item Donc le gain n'est pas limit\'e \`a un seul type de difficult\'e.
+    \end{itemize}
 \end{frame}
 
 \section{Conclusion}
 
 \begin{frame}{Conclusion}
     \begin{itemize}
-        \item DHVT is the stronger model in this experiment.
-        \item It improves validation accuracy, macro metrics, and calibration while using fewer parameters.
-        \item The gain is visible in curves, class-level results, agreement analysis, and attention visualization.
-        \item A fair comparison needs multiple views of evaluation and must also discuss the limitations of both model families.
+        \item Le \textbf{CNN} est fort pour le \textbf{local}.
+        \item Le \textbf{ViT} est fort pour le \textbf{global}.
+        \item \textbf{DHVT} essaie de combiner les deux.
+        \item Dans nos exp\'eriences, cela donne \textbf{de meilleurs r\'esultats qu'AlexNet}, surtout sur les cas difficiles.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Future Work}
+\begin{frame}{R\'ef\'erences}
+    \small
     \begin{itemize}
-        \item Extend the comparison to another dataset such as CIFAR-100 or a custom image folder.
-        \item Add a dedicated calibration slide with reliability-diagram comparison for both models.
-        \item Study whether the same pattern remains true under longer training, stronger augmentation, and different compute budgets.
+        \item [1] Krizhevsky, A., Sutskever, I., and Hinton, G. E. \textit{ImageNet Classification with Deep Convolutional Neural Networks}. Advances in Neural Information Processing Systems (NeurIPS), 2012.
+        \item [2] Dosovitskiy, A. et al. \textit{An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale}. International Conference on Learning Representations (ICLR), 2021.
+        \item [3] Lu, Y. et al. \textit{Bridging the Gap Between Vision Transformers and Convolutional Neural Networks on Small Datasets}. arXiv preprint arXiv:2203.16353, 2022.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{References}
-    \footnotesize
-    \begin{thebibliography}{9}
-        \bibitem{alexnet}
-        Krizhevsky, A., Sutskever, I., and Hinton, G. E.
-        \newblock \emph{ImageNet Classification with Deep Convolutional Neural Networks}.
-        \newblock 2012.
+\begin{frame}{Merci}
+    \centering
+    \Large Merci pour votre attention
 
-        \bibitem{vit}
-        Dosovitskiy, A. et al.
-        \newblock \emph{An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale}.
-        \newblock 2021.
+    \vspace{0.4cm}
+    \normalsize Questions ?
+\end{frame}
 
-        \bibitem{dhvt}
-        Lu, Y. et al.
-        \newblock \emph{Bridging the Gap Between Vision Transformers and Convolutional Neural Networks on Small Datasets}.
-        \newblock 2022.
-    \end{thebibliography}
+\appendix
+\section{Annexe}
+
+\begin{frame}{Annexe : SOPE}
+    \hypertarget{app:sope}{}
+    \centering
+    \includegraphics[width=0.88\linewidth,height=0.56\textheight,keepaspectratio]{architecture/DHVT.png}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item SOPE remplace l'entr\'ee par patches trop directe.
+        \item L'id\'ee est de garder plus d'information locale d\`es le d\'ebut.
+        \item Donc les tokens d'entr\'ee sont plus adapt\'es aux petites images.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Annexe : HI-MHSA}
+    \hypertarget{app:himhsa}{}
+    \centering
+    \includegraphics[width=0.88\linewidth,height=0.56\textheight,keepaspectratio]{architecture/HI-MHSA.png}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item HI-MHSA modifie le bloc d'attention.
+        \item Les \textit{head tokens} aident \`a mieux organiser l'information globale.
+        \item Le but est d'obtenir une meilleure repr\'esentation finale pour la classification.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Annexe : DAFF}
+    \hypertarget{app:daff}{}
+    \centering
+    \includegraphics[width=0.88\linewidth,height=0.56\textheight,keepaspectratio]{architecture/DAFF.png}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item DAFF remplace le FFN standard.
+        \item Il ajoute une partie locale dans le bloc transformer.
+        \item Cela aide DHVT \`a combiner information locale et information globale.
+    \end{itemize}
 \end{frame}
 
 \end{document}

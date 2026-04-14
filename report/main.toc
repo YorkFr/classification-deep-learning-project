@@ -1,35 +1,21 @@
 \contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
-\contentsline {section}{\numberline {2}Project Objectives}{2}{section.2}%
-\contentsline {section}{\numberline {3}Why Compare AlexNet and DHVT}{2}{section.3}%
-\contentsline {section}{\numberline {4}Dataset}{3}{section.4}%
-\contentsline {section}{\numberline {5}Model Description}{3}{section.5}%
-\contentsline {subsection}{\numberline {5.1}AlexNet}{3}{subsection.5.1}%
-\contentsline {subsubsection}{\numberline {5.1.1}Mathematical view of convolution}{4}{subsubsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.2}DHVT: Dynamic Hybrid Vision Transformer}{4}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1}SOPE module}{4}{subsubsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2}Class token and positional encoding}{5}{subsubsection.5.2.2}%
-\contentsline {subsubsection}{\numberline {5.2.3}DHVT block}{5}{subsubsection.5.2.3}%
-\contentsline {subsubsection}{\numberline {5.2.4}Attention mechanism}{5}{subsubsection.5.2.4}%
-\contentsline {subsubsection}{\numberline {5.2.5}DAFF module}{5}{subsubsection.5.2.5}%
-\contentsline {subsubsection}{\numberline {5.2.6}Final classification}{6}{subsubsection.5.2.6}%
-\contentsline {section}{\numberline {6}Experimental Method}{6}{section.6}%
-\contentsline {section}{\numberline {7}Preprocessing}{7}{section.7}%
-\contentsline {section}{\numberline {8}Training Strategy}{7}{section.8}%
-\contentsline {section}{\numberline {9}Main Difficulties Encountered}{7}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Difficulty 1: Comparing Two Models Fairly}{7}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Difficulty 2: Transformer Training on Small Datasets}{7}{subsection.9.2}%
-\contentsline {subsection}{\numberline {9.3}Difficulty 3: Keeping the Work in Homework Style}{8}{subsection.9.3}%
-\contentsline {subsection}{\numberline {9.4}Difficulty 4: Reusability for Other Datasets}{8}{subsection.9.4}%
-\contentsline {subsection}{\numberline {9.5}Difficulty 5: Long Training Time and Missing Intermediate Output}{8}{subsection.9.5}%
-\contentsline {section}{\numberline {10}Results}{8}{section.10}%
-\contentsline {subsection}{\numberline {10.1}Training and Validation Curves}{9}{subsection.10.1}%
-\contentsline {subsection}{\numberline {10.2}Confusion Matrices}{9}{subsection.10.2}%
-\contentsline {subsection}{\numberline {10.3}Misclassified Examples}{11}{subsection.10.3}%
-\contentsline {subsection}{\numberline {10.4}Examples Misclassified by Both Models}{12}{subsection.10.4}%
-\contentsline {subsection}{\numberline {10.5}Confidence Distribution}{13}{subsection.10.5}%
-\contentsline {subsection}{\numberline {10.6}Agreement and Disagreement Between Models}{14}{subsection.10.6}%
-\contentsline {subsection}{\numberline {10.7}DHVT Attention Visualization}{16}{subsection.10.7}%
-\contentsline {section}{\numberline {11}Discussion}{17}{section.11}%
-\contentsline {section}{\numberline {12}Conclusion}{18}{section.12}%
-\contentsline {section}{\numberline {A}Appendix: Exported Figures Used in This Report}{18}{appendix.A}%
-\contentsline {section}{\numberline {B}References}{19}{appendix.B}%
+\contentsline {section}{\numberline {2}Objectifs du projet}{2}{section.2}%
+\contentsline {section}{\numberline {3}Pourquoi comparer AlexNet et DHVT}{2}{section.3}%
+\contentsline {section}{\numberline {4}Jeu de donn\'ees}{3}{section.4}%
+\contentsline {section}{\numberline {5}Modules essentiels de DHVT}{4}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Module SOPE}{4}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}M\'ecanisme d'attention}{4}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Module DAFF}{5}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Mise en oeuvre exp\'erimentale}{6}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Workflow g\'en\'eral}{6}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Pr\'etraitement}{7}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Entra\^\i nement}{7}{subsection.6.3}%
+\contentsline {section}{\numberline {7}R\'esultats}{8}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Comparaison principale entre CIFAR-10 et CIFAR-100}{8}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Comparaison globale entre les deux mod\`eles}{8}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Diff\'erences par classe}{10}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Les images difficiles restent interpr\'etables}{11}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}R\'esultats sur les variantes de CIFAR-100}{13}{subsection.7.5}%
+\contentsline {section}{\numberline {8}Discussion}{13}{section.8}%
+\contentsline {section}{\numberline {9}Conclusion}{14}{section.9}%
+\contentsline {section}{\numberline {10}R\'ef\'erences}{14}{section.10}%
